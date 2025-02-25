@@ -1,0 +1,3 @@
+package automaton
+
+class Automaton
