@@ -1,39 +1,30 @@
 package automaton
 
+import scalafx._
 import scalafx.application.JFXApp3
-import scalafx.geometry.Insets
-import scalafx.scene.Scene
-import scalafx.scene.effect.DropShadow
-import scalafx.scene.layout.HBox
-import scalafx.scene.paint.*
-import scalafx.scene.paint.Color.*
-import scalafx.scene.text.Text
+import scalafx.scene._
+import scalafx.scene.control._
+import scalafx.scene.layout._
+import scalafx.scene.paint._
+import scalafx.scene.shape._
+import scalafx.stage._
+
+import automaton.scenes.HomeScene
 
 import scala.language.implicitConversions
 
-object GUI extends JFXApp3 :
+object GUIMain extends JFXApp3 :
 
   override def start(): Unit =
 
-    stage = new JFXApp3.PrimaryStage :
-      //    initStyle(StageStyle.Unified)
+    stage = new JFXApp3.PrimaryStage {
+
       title = "Automaton Calculator"
-      scene = new Scene :
-        fill = Color.rgb(38, 38, 38)
-        content = new HBox :
-          padding = Insets(50, 80, 50, 80)
-          children = Seq(
-            new Text :
-              text = "Scala"
-              style = "-fx-font: normal bold 100pt sans-serif"
-              fill = new LinearGradient(endX = 0, stops = Stops(Red, DarkRed))
-            ,
-            new Text :
-              text = "FX"
-              style = "-fx-font: italic bold 100pt sans-serif"
-              fill = new LinearGradient(endX = 0, stops = Stops(White, DarkGray))
-              effect = new DropShadow :
-                color = DarkGray
-                radius = 15
-                spread = 0.25
-          )
+      scene = new HomeScene
+    }
+
+  def changeScene(newScene: Scene): Unit =
+      stage.scene = newScene
+
+
+
