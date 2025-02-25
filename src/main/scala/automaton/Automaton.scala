@@ -1,14 +1,31 @@
 package automaton
 
-case class Transition(from: String, symbol: Char, to: String)
+case class Transition(from: State, to: State, symbol: String)
 
-class Automaton(
-                 val states: Set[String],
-                 val alphabet: Set[Char],
-                 val transitions: Set[Transition],
-                 val initialState: String,
-                 val finalStates: Set[String]
+case class State(label: String, SFinal: Boolean, x: Double, y: Double) {
+  def displayName: String = if (SFinal) s"$label*" else label
+}
+
+case class Automaton(
+                 val states: Seq[State],
+                 val transitions: Seq[Transition],
+                 val initialState: State,
+                 val finalStates: State
                ) {
+
+  def addState(state: State): Automaton = copy(states = states :+ state)
+
+  def addTransition(transition: Transition): Automaton = copy(transitions = transitions :+ transition)
+
+  // Method to get all transitions for a specific state
+  def getTransitionsForState(state: State): Seq[Transition] = {
+    transitions.filter(_.from.label == state.label)
+  }
+
+  def isValid: Boolean = {
+    states.nonEmpty && transitions.nonEmpty
+  }
+
   def testString(input: String): Boolean = {
     // Implement automaton logic here
     false // Placeholder

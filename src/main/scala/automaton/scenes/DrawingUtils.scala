@@ -2,16 +2,17 @@ package automaton.scenes
 
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.paint.Color
+import automaton._
 
 object DrawingUtils {
   //Draws a node for a state
-  def drawState(gc: GraphicsContext, x: Double, y: Double, label: String): Unit = {
+  def drawState(gc: GraphicsContext, state: State): Unit = {
     gc.setFill(Color.LightBlue)
-    gc.fillOval(x, y, 50, 50) // Draw state as a circle
+    gc.fillOval(state.x, state.y, 50, 50) // Draw state as a circle
 
     // State label
     gc.setFill(Color.Black)
-    gc.fillText(label, x + 15, y + 25)
+    gc.fillText(state.label, state.x + 15, state.y + 25)
   }
 
   // Draw an arrow

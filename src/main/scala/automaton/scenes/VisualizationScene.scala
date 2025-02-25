@@ -9,11 +9,14 @@ import scalafx.scene.layout._
 import scalafx.scene.paint._
 import scalafx.scene.shape._
 import scalafx.stage._
-
+import automaton._
 
 class VisualizationScene extends Scene(600, 400) {
   val canvas = new Canvas(600, 400)
   val gc: GraphicsContext = canvas.graphicsContext2D
+
+  val q0: State = new State("q0", false, 100, 100)
+  val q1: State = new State("q1", true, 250, 100)
 
   drawAutomaton()
 
@@ -22,12 +25,12 @@ class VisualizationScene extends Scene(600, 400) {
   }
 
   def drawAutomaton(): Unit = {
-    // Example: Drawing a state as a circle
-    DrawingUtils.drawState(gc, 100, 100, "q0")
-    // Example: Drawing a transition (arrow)
+
+    DrawingUtils.drawState(gc, q0)
+
     DrawingUtils.drawArrow(gc, 150, 125, 250, 125)
 
-    DrawingUtils.drawState(gc, 250, 100, "q1")
+    DrawingUtils.drawState(gc, q1)
 
   }
 }
