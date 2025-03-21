@@ -2,12 +2,14 @@ package automaton
 
 case class Transition(from: State, to: State, symbol: String)
 
-case class State(label: String, SFinal: Boolean, x: Double, y: Double) {
-  def displayName: String = if (SFinal) s"$label*" else label
+case class State(label: String, FinalState: Boolean) {
+  def displayName: String = if (FinalState) s"$label*" else label
 }
+
 
 case class Automaton(
                  val states: Seq[State],
+                 val alphabet: Seq[String],
                  val transitions: Seq[Transition],
                  val initialState: State,
                  val finalStates: State

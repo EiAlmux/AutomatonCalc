@@ -17,11 +17,11 @@ object GUIMain extends JFXApp3 :
 
   override def start(): Unit =
 
-    stage = new JFXApp3.PrimaryStage {
+    stage = new JFXApp3.PrimaryStage :
 
       title = "Automaton Calculator"
       scene = new HomeScene
-    }
+    
 
   def changeScene(newScene: Scene): Unit =
       stage.scene = newScene

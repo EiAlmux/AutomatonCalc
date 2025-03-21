@@ -1,4 +1,3 @@
-import scala.Seq
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
@@ -15,6 +14,12 @@ lazy val root = (project in file("."))
       "org.scalatest" %% "scalatest" % "3.2.19" % Test,
 
       // Typesafe Config for configuration files
-      "com.typesafe" % "config" % "1.4.3"
+      "com.typesafe" % "config" % "1.4.3",
+
     ),
   )
+// sbt 1.1.x
+enablePlugins(Antlr4Plugin)
+
+// sbt 0.13.x
+antlr4Settings
