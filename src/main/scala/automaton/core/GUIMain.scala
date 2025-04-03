@@ -1,10 +1,9 @@
-package automaton
+package automaton.core
 
-import automaton.GUIMain.stage
 import scalafx._
 import scalafx.application.JFXApp3
 import scalafx.scene._
-import scenes.HomeScene
+import automaton.scenes.HomeScene
 
 import scala.language.implicitConversions
 
@@ -16,7 +15,7 @@ object GUIMain extends JFXApp3 :
 
       title = "Automaton Calculator"
       scene = new HomeScene
-    
+
 
   def changeScene(newScene: Scene): Unit =
       stage.scene = newScene

@@ -3,17 +3,17 @@ package automaton.utils
 case class Transition(from: State, symbol: String, to: State)
 
 case class State(label: String) {
-  override def toString : String = label
+  override def toString: String = label
 }
 
 abstract class Automaton(
-                 val states: Seq[State],
-                 val alphabet: Seq[String],
-                 val transitions: Seq[Transition],
-                 val initialState: State,
-                 val finalStates: Seq[State],
-                 val computations: Seq[String]
-               ) {
+                          val states: Seq[State],
+                          val alphabet: Seq[String],
+                          val transitions: Seq[Transition],
+                          val initialState: State,
+                          val finalStates: Seq[State],
+                          val computations: Seq[String]
+                        ) {
   def addState(state: State): Automaton
 
   def addTransition(transition: Transition): Automaton

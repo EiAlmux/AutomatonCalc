@@ -1,13 +1,13 @@
 package automaton.scenes
 
-import automaton.GUIMain
+import automaton.core.GUIMain
 import automaton.utils.MainAutomaton
 import scalafx.scene.Scene
 import scalafx.scene.control.Button
 import scalafx.scene.layout.VBox
 
-class HomeScene extends Scene(400, 300) :
-  root = new VBox :
+class HomeScene extends Scene(400, 300):
+  root = new VBox:
     children = Seq(
       new Button("DFA") {
         onAction = _ =>

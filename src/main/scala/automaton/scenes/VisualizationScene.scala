@@ -6,7 +6,7 @@ import scalafx.scene._
 import scalafx.scene.layout._
 import automaton.utils.{DFA, MainAutomaton}
 
-class VisualizationScene extends Scene(600, 400) {
+class VisualizationScene extends Scene(600, 400):
   val canvas = new Canvas(600, 400)
   val gc: GraphicsContext = canvas.graphicsContext2D
 
@@ -16,7 +16,6 @@ class VisualizationScene extends Scene(600, 400) {
 
   val dfa: Option[DFA] = MainAutomaton.DFACache.getDFA
 
-  //drawAutomaton NOT WORKING
-  //DrawingUtils.drawAutomaton(gc, dfa)
+//drawAutomaton NOT WORKING
+//DrawingUtils.drawAutomaton(gc, dfa)
 
-}
