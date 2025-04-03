@@ -3,9 +3,9 @@ package automaton.scenes
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.paint.Color
 import automaton._
-import automaton.Main._
 
 object DrawingUtils {
+  /* NOT WORKING
   //Draws a node for a state
   private def drawState(gc: GraphicsContext, state: State): Unit = {
     val (x, y) = positions.get(state) match
@@ -20,11 +20,11 @@ object DrawingUtils {
 
     // State label
     gc.setFill(Color.Black)
-    gc.fillText(state.displayName, x + 15, y + 25)
+    gc.fillText(state.toString, x + 15, y + 25)
   }
 
   // Draw an arrow
-  private def drawArrow(gc: GraphicsContext, start: State, end: State): Unit = {
+  private def drawTransition(gc: GraphicsContext, start: State, end: State): Unit = {
     val (startX, startY) = positions.get(start) match
       case Some((x,y)) => (x + 50, y + 25)
       case None        => (-1, -1)
@@ -51,7 +51,12 @@ object DrawingUtils {
     gc.strokeLine(endX, endY, arrowX2, arrowY2)
   }
 
-  def drawAutomaton(gc: GraphicsContext, automaton: Automaton): Unit =
+  def drawAutomaton(gc: GraphicsContext, automaton: Option[Automaton]): Unit =
     automaton.states.foreach(s => drawState(gc, s))
-    automaton.transitions.foreach(a => drawArrow(gc, a.from, a.to))
+    automaton.transitions.foreach(a => drawTransition(gc, a.from, a.to))
+*/
+
 }
+
+
+

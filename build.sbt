@@ -16,10 +16,19 @@ lazy val root = (project in file("."))
       // Typesafe Config for configuration files
       "com.typesafe" % "config" % "1.4.3",
 
+      "org.antlr" % "antlr4-runtime" % "4.13.2"
+
     ),
   )
-// sbt 1.1.x
 enablePlugins(Antlr4Plugin)
 
-// sbt 0.13.x
+antlr4Version := "4.13.2"
+
+/*
 antlr4Settings
+
+antlr4GenerateListener := true
+antlr4GenerateVisitor := true
+
+antlr4OutputDir := (Compile / sourceManaged).value / "antlr"
+*/

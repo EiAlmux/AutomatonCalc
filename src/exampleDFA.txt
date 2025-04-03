@@ -1,0 +1,11 @@
+DFA {
+    states: q0, q1, q2;
+    alphabet: a, b, c, d;
+    transitions:
+        q0 a -> q1;
+        q1 b -> q2;
+        q2 c -> q0;
+    initial: q0;
+    final: q2;
+    computations:  abbbb, abcd;
+}

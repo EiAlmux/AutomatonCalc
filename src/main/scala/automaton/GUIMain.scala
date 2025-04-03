@@ -1,15 +1,10 @@
 package automaton
 
+import automaton.GUIMain.stage
 import scalafx._
 import scalafx.application.JFXApp3
 import scalafx.scene._
-import scalafx.scene.control._
-import scalafx.scene.layout._
-import scalafx.scene.paint._
-import scalafx.scene.shape._
-import scalafx.stage._
-
-import automaton.scenes.HomeScene
+import scenes.HomeScene
 
 import scala.language.implicitConversions
 
