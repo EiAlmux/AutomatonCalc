@@ -30,6 +30,7 @@ object MainAutomaton:
 
       DFACache.storeDFA(dfa)
 
+
       Some(dfa)
 
     catch

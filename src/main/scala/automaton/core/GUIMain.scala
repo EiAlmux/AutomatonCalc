@@ -7,6 +7,16 @@ import automaton.scenes.HomeScene
 
 import scala.language.implicitConversions
 
+/*
+TO DO
+
+Check on the dfa to verify integrity
+Align better with MVC model
+Expand to nfa, enfa, pda
+
+*/
+
+
 object GUIMain extends JFXApp3 :
 
   override def start(): Unit =

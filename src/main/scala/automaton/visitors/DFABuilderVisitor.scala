@@ -46,7 +46,7 @@ class DFABuilderVisitor extends DFABaseVisitor[DFAComponents] {
 
   override def visitComputations(ctx: DFAParser.ComputationsContext): DFAComponents =
     val strings = ctx.SYMBOL().asScala.map(_.getText)
-    DFAComponents(computations = strings.toSeq)
+    DFAComponents(computations = strings.map(str => Computation(str)).toSeq)
 
   // Ensure other section types are handled by visiting their children
   override def visitSection(ctx: DFAParser.SectionContext): DFAComponents = {

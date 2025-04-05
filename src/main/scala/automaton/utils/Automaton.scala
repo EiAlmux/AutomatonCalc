@@ -1,9 +1,19 @@
 package automaton.utils
 
-case class Transition(from: State, symbol: String, to: State)
+case class Transition(source: State, symbol: String, destination: State)
 
 case class State(label: String) {
   override def toString: String = label
+}
+
+case class Computation(str: String, isAccepted: Boolean = false, computed: Boolean = false) {
+  override def toString: String = {
+    if (!computed) str
+    else {
+      val status = if (isAccepted) "\t\taccepted" else "\t\tNOT accepted"
+      s"$str: $status"
+    }
+  }
 }
 
 abstract class Automaton(
@@ -12,21 +22,28 @@ abstract class Automaton(
                           val transitions: Seq[Transition],
                           val initialState: State,
                           val finalStates: Seq[State],
-                          val computations: Seq[String]
+                          val computations: Seq[Computation]
                         ) {
-  def addState(state: State): Automaton
+  def getTransitionsForState(state: State): Seq[Transition] =
+    transitions.filter(_.source == state)
 
-  def addTransition(transition: Transition): Automaton
-
-  def getTransitionsForState(state: State): Seq[Transition] = {
-    transitions.filter(_.from == state)
-  }
-
-  def isValid: Boolean = {
+  def isValid: Boolean =
+    //EXPAND AND ACTUALLY USE IT
     states.nonEmpty && transitions.nonEmpty
-  }
+
+  def withComputations(newComps : Seq[Computation]): Automaton
 
   def testString(input: String): Boolean
+
+  def testAutomaton(): Automaton =
+    val updatedComputations = computations.map {
+      case c if c.computed => c
+      case c => c.copy(
+        isAccepted = testString(c.str),
+        computed = true
+      )
+    }
+    withComputations(updatedComputations)
 
 }
 
