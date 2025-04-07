@@ -17,14 +17,14 @@ case class Computation(str: String, isAccepted: Boolean = false, computed: Boole
 }
 
 abstract class Automaton(
-                          val states: Seq[State],
-                          val alphabet: Seq[String],
-                          val transitions: Seq[Transition],
+                          val states: Set[State],
+                          val alphabet: Set[String],
+                          val transitions: Set[Transition],
                           val initialState: State,
-                          val finalStates: Seq[State],
+                          val finalStates: Set[State],
                           val computations: Seq[Computation]
                         ) {
-  def getTransitionsForState(state: State): Seq[Transition] =
+  def getTransitionsForState(state: State): Set[Transition] =
     transitions.filter(_.source == state)
 
   def isValid: Boolean =
