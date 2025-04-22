@@ -1,26 +1,19 @@
 import Antlr4Plugin.autoImport.{Antlr4, *}
-import sbt.CompileOrder
-import sbt.Keys.compileOrder
-
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.3.5"
+
+
+enablePlugins(Antlr4Plugin)
 
 lazy val root = (project in file("."))
   .settings(
     name := "AutomatonCalc",
 
-    compileOrder := CompileOrder.JavaThenScala,
-    fork := true,
-
-    Compile / unmanagedSourceDirectories += baseDirectory.value / "target/scala-3.3.5/main/automaton/antrl4",
     Antlr4 / antlr4GenListener := false,
     Antlr4 / antlr4GenVisitor := true,
-    //Antrl4 / antlr4OutputDirectory := baseDirectory.value / "target/scala-3.3.5/main/automaton/antrl4",
-    //Antlr4 / unmanagedSourceDirectories += baseDirectory.value / "target/scala-3.3.5/main/automaton/antrl4",
     Antlr4 / antlr4PackageName := Some("automaton.antrl4"),
     Antlr4 / antlr4Version := "4.13.2",
-    Compile / managedSourceDirectories += baseDirectory.value / "src/main/gen",
 
     javaOptions ++= {
       val osName = System.getProperty("os.name").toLowerCase match {
@@ -39,7 +32,6 @@ lazy val root = (project in file("."))
     // Dependencies
     libraryDependencies ++= Seq(
       "org.scalafx" %% "scalafx" % "23.0.1-R34",
-      //"org.scalatest" %% "scalatest" % "3.2.19" % Test,
       "com.typesafe" % "config" % "1.4.3",
       "org.antlr" % "antlr4-runtime" % "4.13.2",
     )

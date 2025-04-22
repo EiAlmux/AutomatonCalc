@@ -1,9 +1,5 @@
 grammar FiniteAutomaton;
 
-@header {
-package automaton.antlr4;
-}
-
 automaton : automatonType '{' section* '}' ;
 
 automatonType : 'DFA' | 'NFA' | 'ε-NFA' ;

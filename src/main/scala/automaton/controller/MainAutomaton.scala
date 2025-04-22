@@ -1,7 +1,7 @@
 package automaton.controller
 
+import automaton.antrl4.{FiniteAutomatonLexer, FiniteAutomatonParser}
 import automaton.model.Automaton
-import automaton.antlr4.{FiniteAutomatonLexer, FiniteAutomatonParser}
 import automaton.controller.builder.AutomatonComponents
 import automaton.controller.visitor.FiniteAutomatonBuilderVisitor
 import org.antlr.v4.runtime.*
