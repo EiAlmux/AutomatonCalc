@@ -4,10 +4,10 @@ import automaton.controller.MainAutomaton
 import automaton.view.AutomatonView.automatonFormat
 
 object CLIMain:
-  private val DEBUG = 0
+  val DEBUG = 1
   def main(args: Array[String]): Unit = {
 
-    val filePath = "src/NFA.txt"
+    val filePath = "src/eNFA.txt"
     val automaton = MainAutomaton.processAutomaton(filePath)
     if (DEBUG == 1) {
       automaton match {

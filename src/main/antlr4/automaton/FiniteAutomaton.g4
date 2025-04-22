@@ -6,7 +6,7 @@ package automaton.antlr4;
 
 automaton : automatonType '{' section* '}' ;
 
-automatonType : 'DFA' | 'NFA' | 'eNFA' ;
+automatonType : 'DFA' | 'NFA' | 'ε-NFA' ;
 
 section
     : states

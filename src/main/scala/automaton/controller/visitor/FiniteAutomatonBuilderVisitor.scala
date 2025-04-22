@@ -1,6 +1,7 @@
 package automaton.controller.visitor
 
 
+import automaton.CLIMain
 import automaton.model.*
 import automaton.antlr4.*
 import automaton.controller.builder.AutomatonComponents
@@ -19,8 +20,8 @@ class FiniteAutomatonBuilderVisitor extends FiniteAutomatonBaseVisitor[Automaton
     val initialType = Some(ctx.automatonType().getText)
     val sections = ctx.section().asScala.map(visit)
     val result = sections.foldLeft(AutomatonComponents(automatonType = initialType))(_ merge _)
-    //DEBUG
-    //println(result)
+    if (CLIMain.DEBUG == 1)
+        println(result)
 
     validateRequiredSections()
     result

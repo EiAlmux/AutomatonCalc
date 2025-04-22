@@ -1,4 +1,4 @@
-eNFA {
+ε-NFA {
     states: q0, q1,  q2;
     alphabet: 1, 0;
     transitions:

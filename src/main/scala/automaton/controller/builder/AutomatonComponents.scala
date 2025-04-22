@@ -61,7 +61,7 @@ case class AutomatonComponents(
           Some("NFA")
         ).toNFA
 
-      case Some("eNFA") =>
+      case Some("ε-NFA") =>
         NFAComponents(
           states,
           alphabet,
