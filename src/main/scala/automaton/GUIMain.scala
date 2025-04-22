@@ -1,16 +1,15 @@
-package automaton.core
+package automaton
 
 import scalafx._
 import scalafx.application.JFXApp3
 import scalafx.scene._
-import automaton.scenes.HomeScene
+import automaton.view.HomeScene
 
 import scala.language.implicitConversions
 
 /*
 TO DO
 
-Check on the dfa to verify integrity
 Align better with MVC model
 Expand to nfa, enfa, pda
 

@@ -1,7 +1,7 @@
 grammar DFA;
 
 @header {
-package antlr4;
+package automaton.antlr4;
 }
 
 dfa : 'DFA' '{' section* '}' ;

@@ -1,7 +1,8 @@
-package automaton.scenes
+package automaton.view
 
-import automaton.core.GUIMain
-import automaton.utils.{Automaton, DFA, MainAutomaton}
+import automaton.GUIMain
+import automaton.controller.MainAutomaton
+import automaton.model.{Automaton, DFA}
 import scalafx.scene.Scene
 import scalafx.scene.control.Button
 import scalafx.scene.layout.VBox
@@ -12,7 +13,7 @@ class HomeScene extends Scene(400, 300):
       new Button("DFA") {
         onAction = _ =>
           val filePath = "src/exampleDFA.txt"
-          val dfa = MainAutomaton.processDFA(filePath)
+          val dfa = MainAutomaton.processAutomaton(filePath)
           println(dfa.toString)
           println("\n\nProcessing input...\n")
 

@@ -1,10 +1,12 @@
-package automaton.scenes
+package automaton.view
 
+import automaton.controller.MainAutomaton
+import automaton.controller.AutomatonCache
 import scalafx._
 import scalafx.scene.canvas._
 import scalafx.scene._
 import scalafx.scene.layout._
-import automaton.utils.{DFA, MainAutomaton}
+import automaton.model.DFA
 
 class VisualizationScene extends Scene(600, 400):
   val canvas = new Canvas(600, 400)
@@ -14,7 +16,7 @@ class VisualizationScene extends Scene(600, 400):
     children = Seq(canvas)
   }
 
-  val dfa: Option[DFA] = MainAutomaton.DFACache.getDFA
+  val dfa: Option[DFA] = AutomatonCache.getDFA
 
 //drawAutomaton NOT WORKING
 //DrawingUtils.drawAutomaton(gc, dfa)

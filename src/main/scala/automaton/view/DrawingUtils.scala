@@ -1,4 +1,4 @@
-package automaton.scenes
+package automaton.view
 
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.paint.Color

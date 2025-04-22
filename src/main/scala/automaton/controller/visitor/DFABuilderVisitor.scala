@@ -1,10 +1,18 @@
-package automaton.visitors
+package automaton.controller.visitor
 
-import antlr4._
-import automaton.utils._
-import org.antlr.v4.runtime.tree._
+import automaton.antlr4.*
+import automaton.controller.builder.DFAComponents
+import automaton.model.*
+import org.antlr.v4.runtime.tree.*
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
+
+/*
+OLD VERSION FOR DFA ONLY
+
+!!!
+USELESS
+!!!
 
 
 class DFABuilderVisitor extends DFABaseVisitor[DFAComponents] {
@@ -81,3 +89,4 @@ class DFABuilderVisitor extends DFABaseVisitor[DFAComponents] {
     aggregate.merge(nextResult)
   }
 }
+*/

@@ -1,4 +1,4 @@
-package automaton.utils
+package automaton.model
 
 case class Transition(source: State, symbol: String, destination: State)
 
@@ -6,15 +6,8 @@ case class State(label: String) {
   override def toString: String = label
 }
 
-case class Computation(str: String, isAccepted: Boolean = false, computed: Boolean = false) {
-  override def toString: String = {
-    if (!computed) str
-    else {
-      val status = if (isAccepted) "\t\taccepted" else "\t\tNOT accepted"
-      s"$str: $status"
-    }
-  }
-}
+case class Computation(str: String, isAccepted: Boolean = false, computed: Boolean = false)
+
 
 abstract class Automaton(
                           val states: Set[State],
@@ -22,14 +15,11 @@ abstract class Automaton(
                           val transitions: Set[Transition],
                           val initialState: State,
                           val finalStates: Set[State],
-                          val computations: Seq[Computation]
+                          val computations: Seq[Computation],
+                          val automatonType: Option[String]
                         ) {
   def getTransitionsForState(state: State): Set[Transition] =
     transitions.filter(_.source == state)
-
-  def isValid: Boolean =
-    //EXPAND AND ACTUALLY USE IT
-    states.nonEmpty && transitions.nonEmpty
 
   def withComputations(newComps : Seq[Computation]): Automaton
 

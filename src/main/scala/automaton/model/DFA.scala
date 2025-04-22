@@ -1,4 +1,6 @@
-package automaton.utils
+package automaton.model
+
+import automaton.controller.builder.DFAComponents
 
 import scala.util.boundary
 import scala.util.boundary.break
@@ -9,22 +11,11 @@ case class DFA(
                 override val transitions: Set[Transition],
                 override val initialState: State,
                 override val finalStates: Set[State],
-                override val computations: Seq[Computation]
-              ) extends Automaton(states, alphabet, transitions, initialState, finalStates, computations) {
+                override val computations: Seq[Computation],
+                override val automatonType: Option[String] = Some("DFA")
+              ) extends Automaton(states, alphabet, transitions, initialState, finalStates, computations, automatonType) {
 
   validate()
-
-  override def toString: String =
-    s"""
-       |DFA(
-       |  States: ${states.mkString(", ")}
-       |  Alphabet: ${alphabet.mkString(", ")}
-       |  Transitions:
-       |    ${transitions.mkString("\n    ")}
-       |  Initial State: $initialState
-       |  Final States: ${finalStates.mkString(", ")}
-       |  Computations: ${computations.mkString("\n\t\t\t\t")}
-       |)""".stripMargin
 
   override def testString(input: String): Boolean = boundary[Boolean] :
     val inputSymbols = input.map(_.toString)
@@ -74,34 +65,4 @@ case class DFA(
       require(matchingTransitions == 1, s"DFA must have exactly one transition for state $state and symbol $symbol")
     }
 
-} //End of case class DFA
-
-
-case class DFAComponents(
-                          states: Set[State] = Set.empty,
-                          alphabet: Set[String] = Set.empty,
-                          transitions: Set[Transition] = Set.empty,
-                          initialState: Option[State] = None,
-                          finalStates: Set[State] = Set.empty,
-                          computations: Seq[Computation] = Seq.empty
-                        ) {
-  def merge(other: DFAComponents): DFAComponents = DFAComponents(
-    states = this.states ++ other.states,
-    alphabet = this.alphabet ++ other.alphabet,
-    transitions = this.transitions ++ other.transitions,
-    initialState = this.initialState.orElse(other.initialState),
-    finalStates = this.finalStates ++ other.finalStates,
-    computations = this.computations ++ other.computations
-  )
-
-  def withComputations(newComps: Seq[Computation]): DFAComponents =
-    this.copy(computations = newComps)
-
-  def addComputation(comp: Computation): DFAComponents =
-    this.copy(computations = computations :+ comp)
-
-  def toDFA: DFA = initialState match {
-    case Some(init) => DFA(states, alphabet, transitions, init, finalStates, computations)
-    case None => throw new RuntimeException("No initial state defined in the input.")
-  }
 }
