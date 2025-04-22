@@ -8,10 +8,8 @@ import automaton.view.HomeScene
 import scala.language.implicitConversions
 
 /*
-TO DO
-
-Align better with MVC model
-Expand to nfa, enfa, pda
+TODO:
+Expand pda
 
 */
 

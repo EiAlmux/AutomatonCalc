@@ -2,8 +2,8 @@ package automaton.controller.visitor
 
 
 import automaton.CLIMain
+import automaton.antrl4.{FiniteAutomatonBaseVisitor, FiniteAutomatonParser}
 import automaton.model.*
-import automaton.antlr4.*
 import automaton.controller.builder.AutomatonComponents
 import org.antlr.v4.runtime.tree.*
 
@@ -68,7 +68,7 @@ class FiniteAutomatonBuilderVisitor extends FiniteAutomatonBaseVisitor[Automaton
       }
     }.toSet
 
-    AutomatonComponents(transitions = transitions.toSet)
+    AutomatonComponents(transitions = transitions)
   }
 
   override def visitInitialState(ctx: FiniteAutomatonParser.InitialStateContext): AutomatonComponents = {

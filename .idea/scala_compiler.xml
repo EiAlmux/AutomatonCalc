@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <option name="separateProdTestSources" value="true" />
-    <profile name="sbt 1" modules="Automaton Calculator,AutomatonCalc,automatoncalc" />
+    <profile name="sbt 1" modules="Automaton Calculator,AutomatonCalc,AutomatonCalc.main,AutomatonCalc.test,automatoncalc" />
     <profile name="sbt 2" modules="Automaton Calculator.main,Automaton Calculator.test">
       <option name="deprecationWarnings" value="true" />
       <option name="uncheckedWarnings" value="true" />
@@ -12,7 +12,7 @@
         <parameter value="utf8" />
       </parameters>
     </profile>
-    <profile name="sbt 3" modules="AutomatonCalc.main,AutomatonCalc.test,automatoncalc.main,automatoncalc.test">
+    <profile name="sbt 3" modules="automatoncalc.main,automatoncalc.test">
       <option name="compileOrder" value="JavaThenScala" />
     </profile>
   </component>

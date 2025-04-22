@@ -3,6 +3,12 @@ package automaton
 import automaton.controller.MainAutomaton
 import automaton.view.AutomatonView.automatonFormat
 
+/*
+TODO:
+Expand pda
+
+*/
+
 object CLIMain:
   val DEBUG = 0
   def main(args: Array[String]): Unit = {
