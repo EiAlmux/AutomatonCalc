@@ -4,7 +4,7 @@ import automaton.controller.MainAutomaton
 import automaton.view.AutomatonView.automatonFormat
 
 object CLIMain:
-  val DEBUG = 1
+  val DEBUG = 0
   def main(args: Array[String]): Unit = {
 
     val filePath = "src/eNFA.txt"

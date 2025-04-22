@@ -6,7 +6,7 @@ object AutomatonView :
 
   def automatonFormat(automaton: Automaton): String = {
     automaton match {
-      case dfa: DFA => s"""
+      case dfa if automaton.automatonType.contains("DFA") => s"""
                           |DFA:
                           |  States: ${dfa.states.mkString(", ")}
                           |  Alphabet: ${dfa.alphabet.mkString(", ")}
@@ -19,7 +19,7 @@ object AutomatonView :
                           |  Final States: ${dfa.finalStates.mkString(", ")}
                           |  Computations: ${dfa.computations.map(compFormat).mkString("\n\t\t\t\t")}
                           |""".stripMargin
-      case nfa: NFA if automaton.automatonType.contains("NFA") => s"""
+      case nfa if automaton.automatonType.contains("NFA") => s"""
                           |NFA:
                           | States: ${nfa.states.mkString(", ")}
                           | Alphabet: ${nfa.alphabet.mkString(", ")}
@@ -32,7 +32,7 @@ object AutomatonView :
                           | Final States: ${nfa.finalStates.mkString(", ")}
                           | Computations: ${nfa.computations.map(compFormat).mkString("\n\t\t\t\t")}
                           |""".stripMargin
-      case enfa: NFA if automaton.automatonType.contains("ε-NFA") => s"""
+      case enfa if automaton.automatonType.contains("ε-NFA") => s"""
                           |ε-NFA:
                           | States: ${enfa.states.mkString(", ")}
                           | Alphabet: ${enfa.alphabet.mkString(", ")}
