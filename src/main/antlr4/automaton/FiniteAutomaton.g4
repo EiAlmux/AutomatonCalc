@@ -1,4 +1,5 @@
-grammar FiniteAutomaton;
+grammar FiniteAutomaton ;
+import CommonLexer ;
 
 automaton : automatonType '{' section* '}' ;
 
@@ -28,8 +29,3 @@ initialState : 'initial' ':' SYMBOL ';' ;
 finalStates : 'final' ':' SYMBOL (',' SYMBOL)* ';' ;
 
 computations : 'computations' ':' SYMBOL (',' SYMBOL)* ';' ;
-
-// Lexer rules
-SYMBOL : [a-zA-Z0-9_]+ ;
-EPSILON : 'ε' ;
-WS : [ \t\r\n]+ -> skip ;

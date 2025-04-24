@@ -1,4 +1,4 @@
-import Antlr4Plugin.autoImport.{Antlr4, *}
+import Antlr4Plugin.autoImport.Antlr4
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.3.5"
