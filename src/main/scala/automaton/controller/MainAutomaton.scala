@@ -12,7 +12,7 @@ import java.nio.file.{Files, Paths}
 
 object MainAutomaton {
 
-  def processAutomaton(filePath: String): Option[Automaton] =
+  def processFiniteAutomaton(filePath: String): Option[Automaton[_,_]] =
 
     AutomatonCache.getAutomaton match
       case Some(automaton) => return Some(automaton)
@@ -27,11 +27,15 @@ object MainAutomaton {
       val tree: ParseTree = parser.automaton()
 
       val visitor = new FiniteAutomatonBuilderVisitor
-      val automatonComponents: AutomatonComponents = visitor.visit(tree)
-      val automaton = automatonComponents.toAutomaton
-
-      AutomatonCache.storeAutomaton(automaton)
-      Some(automaton)
+      val automatonComponents = visitor.visit(tree)
+      automatonComponents.toAutomaton match {
+        case Right(automaton) =>
+          AutomatonCache.storeAutomaton(automaton)
+          Some(automaton)
+        case Left(error) =>
+          println(s"Error creating automaton: $error")
+          None
+      }
 
     catch
       case e: Exception =>

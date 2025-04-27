@@ -1,7 +1,6 @@
 package automaton.controller.builder
 
-import automaton.model.{State, Transition, Computation}
-import automaton.model.DFA
+import automaton.model.{DFA, State, Transition, Computation}
 
 case class DFAComponents(
                           states: Set[State] = Set.empty,
@@ -10,25 +9,31 @@ case class DFAComponents(
                           initialState: Option[State] = None,
                           finalStates: Set[State] = Set.empty,
                           computations: Seq[Computation] = Seq.empty,
-                          automatonType: Option[String] = Some("DFA")
-                        ) {
-  def merge(other: DFAComponents): DFAComponents = DFAComponents(
-    states = this.states ++ other.states,
-    alphabet = this.alphabet ++ other.alphabet,
-    transitions = this.transitions ++ other.transitions,
-    initialState = this.initialState.orElse(other.initialState),
-    finalStates = this.finalStates ++ other.finalStates,
-    computations = this.computations ++ other.computations
-  )
+                        ) extends AutomatonComponents[Transition, DFA] {
+
+  def merge (other:AutomatonComponents[Transition, DFA]): DFAComponents = other match {
+    case d:DFAComponents =>
+      DFAComponents(
+        states = this.states ++ d.states,
+        alphabet = this.alphabet ++ d.alphabet,
+        transitions = this.transitions ++ d.transitions,
+        initialState = this.initialState.orElse(d.initialState),
+        finalStates = this.finalStates ++ d.finalStates,
+        computations = this.computations ++ d.computations
+        )
+    case _ => throw new IllegalArgumentException("Can only merge with DFAComponents")
+  }
 
   def withComputations(newComps: Seq[Computation]): DFAComponents =
     this.copy(computations = newComps)
 
-  def addComputation(comp: Computation): DFAComponents =
-    this.copy(computations = computations :+ comp)
+  def toAutomaton:Either[String, DFA] = initialState match {
+    case Some(init) =>    Right(DFA(states, alphabet, transitions, init, finalStates, computations))
+    case None       =>    Left("No initial state defined in the input")
+  }
 
-  def toDFA: DFA = initialState match {
-    case Some(init) => DFA(states, alphabet, transitions, init, finalStates, computations, Some("DFA"))
-    case None => throw new RuntimeException("No initial state defined in the input.")
+  def toDFA: DFA = toAutomaton match {
+    case Right(dfa) => dfa
+    case Left(err) => throw new RuntimeException(err)
   }
 }

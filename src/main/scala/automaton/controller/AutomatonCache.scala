@@ -1,19 +1,15 @@
 package automaton.controller
 
-import automaton.model.{Automaton, DFA}
+import automaton.model.{Automaton, DFA, TransitionType}
 
 object AutomatonCache {
-  private var cachedAutomaton: Option[Automaton] = None
+  private var cachedAutomaton:Option[Automaton[_, _]] = None
 
-  def getAutomaton: Option[Automaton] = cachedAutomaton
+  def getAutomaton:Option[Automaton[_, _]] = cachedAutomaton
 
-  def storeAutomaton(automaton: Automaton): Unit = {
+  def storeAutomaton[T <: TransitionType, A <: Automaton[T, A]] (automaton:Automaton[T, A]):Unit = {
     cachedAutomaton = Some(automaton)
   }
-
-  // For backward compatibility
-  def getDFA: Option[DFA] = cachedAutomaton.collect { case dfa: DFA => dfa }
-  def storeDFA(dfa: DFA): Unit = storeAutomaton(dfa)
 }
 
 
