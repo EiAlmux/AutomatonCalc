@@ -2,38 +2,40 @@ package automaton.controller.builder
 
 import automaton.model.{Computation, NFA, State, Transition}
 
+case class NFAComponents (
+                           states: Set [State] = Set.empty,
+                           alphabet: Set [String] = Set.empty,
+                           transitions: Set [Transition] = Set.empty,
+                           initialState: Option [State] = None,
+                           finalStates: Set [State] = Set.empty,
+                           computations: Seq [Computation] = Seq.empty,
+                           epsilonNFA: Boolean = false
+                         ) extends AutomatonComponents [Transition, NFA] {
 
-case class NFAComponents(
-                          states: Set[State] = Set.empty,
-                          alphabet: Set[String] = Set.empty,
-                          transitions: Set[Transition] = Set.empty,
-                          initialState: Option[State] = None,
-                          finalStates: Set[State] = Set.empty,
-                          computations: Seq[Computation] = Seq.empty,
-                          automatonType: Option[String] = Some("NFA")
-                        ) {
-  def merge(other: NFAComponents): NFAComponents = NFAComponents(
-    states = this.states ++ other.states,
-    alphabet = this.alphabet ++ other.alphabet,
-    transitions = this.transitions ++ other.transitions,
-    initialState = this.initialState.orElse(other.initialState),
-    finalStates = this.finalStates ++ other.finalStates,
-    computations = this.computations ++ other.computations,
-    automatonType = (this.automatonType, other.automatonType) match {
-      case (Some("ε-NFA"), _) | (_, Some("ε-NFA")) => Some("ε-NFA")
-      case (Some("NFA"), _) | (_, Some("NFA")) => Some("NFA")
-      case (None, None) => None
-    }
-  )
+  def merge (other: AutomatonComponents [Transition, NFA]): NFAComponents = other match {
+    case n: NFAComponents =>
+      NFAComponents (
+        states = this.states ++ n.states,
+        alphabet = this.alphabet ++ n.alphabet,
+        transitions = this.transitions ++ n.transitions,
+        initialState = this.initialState.orElse (n.initialState),
+        finalStates = this.finalStates ++ n.finalStates,
+        computations = this.computations ++ n.computations,
+        epsilonNFA = this.epsilonNFA || n.epsilonNFA
+        )
+    case _ => throw new IllegalArgumentException ("Can only merge with NFAComponents")
+  }
 
-  def withComputations(newComps: Seq[Computation]): NFAComponents =
-    this.copy(computations = newComps)
+  def withComputations (newComps: Seq [Computation]): NFAComponents =
+    this.copy (computations = newComps)
 
-  def addComputation(comp: Computation): NFAComponents =
-    this.copy(computations = computations :+ comp)
+  override def toAutomaton: Either [String, NFA] = initialState match {
+    case Some (init) => Right (NFA (states, alphabet, transitions, init, finalStates, computations, true))
+    case None => Left ("No initial state defined in the input")
+  }
 
-  def toNFA: NFA = initialState match {
-    case Some(init) => NFA(states, alphabet, transitions, init, finalStates, computations, automatonType)
-    case None => throw new RuntimeException("No initial state defined in the input.")
+  def toNFA: NFA = toAutomaton match {
+    case Right (nfa) => nfa
+    case Left (err) => throw new RuntimeException (err)
   }
 }

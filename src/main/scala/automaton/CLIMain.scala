@@ -1,35 +1,51 @@
 package automaton
 
 import automaton.controller.MainAutomaton
-import automaton.view.AutomatonView.automatonFormat
+import automaton.model.Automaton
+import automaton.view.AutomatonView
 
 /*
 TODO:
 Expand pda
+TestString in PDA
 
 */
 
 object CLIMain:
   val DEBUG = 0
-  def main(args: Array[String]): Unit = {
 
+  def main(args: Array[String]): Unit = {
     val filePath = "src/eNFA.txt"
-    val automaton = MainAutomaton.processAutomaton(filePath)
+
+    val automaton = MainAutomaton.processFiniteAutomaton(filePath)
+
     if (DEBUG == 1) {
       automaton match {
-        case Some(automaton) => println(automatonFormat(automaton))
-        case None => println("Failed to process automaton")
+        case Some(auto) =>
+          println(AutomatonView.automatonFormat(auto))
+          println("\n\nProcessing input...\n")
+        case None =>
+          println("Failed to process automaton")
+          return
       }
-      println("\n\nProcessing input...\n")
     }
 
-
-    val testedAutomaton = automaton.map(_.testAutomaton())
+    val testedAutomaton = automaton.flatMap { auto =>
+      try {
+        Some(auto.testAutomaton())
+      } catch {
+        case e:Exception =>
+          println(s"Error testing automaton: ${e.getMessage}")
+          None
+      }
+    }
 
     testedAutomaton match {
-      case Some(d) => println(automatonFormat(d))
-      case None => println("Failed to process automaton")
+      case Some(tested: Automaton[_, _]) => println(AutomatonView.automatonFormat(tested))
+      case Some(_) => println("Error: Test result is not an Automaton")
+      case None => println("Failed to test automaton")
     }
   }
+
 
 

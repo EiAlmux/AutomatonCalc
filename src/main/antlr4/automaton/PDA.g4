@@ -10,7 +10,8 @@ section
     | inputAlphabet
     | stackAlphabet
     | transitions
-    | initialConfig
+    | initialState
+    | initialStack
     | finalStates
     | computations
     ;
@@ -25,10 +26,9 @@ inputSymbol : SYMBOL | EPSILON ;
 stackSymbol : SYMBOL | EPSILON ;
 stackOperation : SYMBOL* | EPSILON ;
 
+initialState : 'initial state' ':' SYMBOL ';' ;
+initialStack: 'initial stack' ':' SYMBOL ';' ;
 
-initialConfig: 'initial state' ':' SYMBOL ';'
-               'initial stack' ':' SYMBOL ';'
-               ;
 finalStates : 'final' ':' SYMBOL (',' SYMBOL)* ';' ;
 
 computations : 'computations' ':' SYMBOL (',' SYMBOL)* ';' ;

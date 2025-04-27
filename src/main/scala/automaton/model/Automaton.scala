@@ -1,7 +1,5 @@
 package automaton.model
 
-case class Transition(source: State, symbol: String, destination: State)
-
 case class State(label: String) {
   override def toString: String = label
 }
@@ -9,23 +7,21 @@ case class State(label: String) {
 case class Computation(str: String, isAccepted: Boolean = false, computed: Boolean = false)
 
 
-abstract class Automaton(
-                          val states: Set[State],
-                          val alphabet: Set[String],
-                          val transitions: Set[Transition],
-                          val initialState: State,
-                          val finalStates: Set[State],
-                          val computations: Seq[Computation],
-                          val automatonType: Option[String]
-                        ) {
-  def getTransitionsForState(state: State): Set[Transition] =
-    transitions.filter(_.source == state)
 
-  def withComputations(newComps : Seq[Computation]): Automaton
+trait Automaton[T <: TransitionType, A <: Automaton[T, A]] {
+  def states:Set[State]
+  def alphabet:Set[String]
+  def transitions:Set[T]
+  def initialState:State
+  def finalStates:Set[State]
+
+  def computations:Seq[Computation] = Seq.empty
+
+  def withUpdatedComputations(newComps : Seq[Computation]): A
 
   def testString(input: String): Boolean
 
-  def testAutomaton(): Automaton =
+  def testAutomaton(): A =
     val updatedComputations = computations.map {
       case c if c.computed => c
       case c => c.copy(
@@ -33,8 +29,16 @@ abstract class Automaton(
         computed = true
       )
     }
-    withComputations(updatedComputations)
+    withUpdatedComputations(updatedComputations)
 
+  protected def validate ():Unit =
+      require(states.nonEmpty, "Automaton must have at least one state")
+      require(alphabet.nonEmpty, "Alphabet must not be empty")
+      require(areDisjoint(states, alphabet), "States and alphabet must be disjoint")
+      require(states.contains(initialState), "Initial state must be in states")
+      require(finalStates.forall(states.contains), "All final states must be in states")
+
+  private def areDisjoint (states:Set[State], strings:Set[String]):Boolean =
+    !states.exists(s => strings.contains(s.label))
 }
-
 

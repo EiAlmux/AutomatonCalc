@@ -16,8 +16,6 @@ class VisualizationScene extends Scene(600, 400):
     children = Seq(canvas)
   }
 
-  val dfa: Option[DFA] = AutomatonCache.getDFA
-
 //drawAutomaton NOT WORKING
 //DrawingUtils.drawAutomaton(gc, dfa)
 
