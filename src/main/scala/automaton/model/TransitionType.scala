@@ -16,7 +16,7 @@ case class PDATransition(
                           source: State,
                           symbol: String,
                           stackSymbolToPop: String,
-                          symbolsToPush: String,
-                          destination: State
+                          destination: State,
+                          symbolsToPush: List[String]
                         ) extends TransitionType
 

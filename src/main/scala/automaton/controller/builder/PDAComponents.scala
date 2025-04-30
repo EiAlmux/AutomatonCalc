@@ -36,7 +36,7 @@ case class PDAComponents(
     this.copy(computations = newComps)
 
   override def toAutomaton: Either [String, PDA] = (initialState, initialStack) match {
-    case (Some (init),Some (initialStack)) => Right (PDA (states, alphabet, stackAlphabet.getOrElse(Set.empty), 
+    case (Some (init),Some (initialStack)) => Right (PDA (states, alphabet, stackAlphabet.getOrElse(Set.empty),
                                                           transitions, init, initialStack, finalStates, computations))
     case (None, _) => Left ("No initial state defined in the input")
     case (_, None) => Left ("No initial stack symbol defined in the input")

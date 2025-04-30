@@ -3,7 +3,7 @@ import CommonLexer ;
 
 automaton : automatonType '{' section* '}' ;
 
-automatonType : 'DFA' | 'NFA' | 'ε-NFA' ;
+automatonType : DFA | NFA | EPSILON_NFA ;
 
 section
     : states

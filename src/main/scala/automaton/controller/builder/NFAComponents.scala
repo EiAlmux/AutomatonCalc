@@ -9,7 +9,6 @@ case class NFAComponents (
                            initialState: Option [State] = None,
                            finalStates: Set [State] = Set.empty,
                            computations: Seq [Computation] = Seq.empty,
-                           epsilonNFA: Boolean = false
                          ) extends AutomatonComponents [Transition, NFA] {
 
   def merge (other: AutomatonComponents [Transition, NFA]): NFAComponents = other match {
@@ -20,8 +19,7 @@ case class NFAComponents (
         transitions = this.transitions ++ n.transitions,
         initialState = this.initialState.orElse (n.initialState),
         finalStates = this.finalStates ++ n.finalStates,
-        computations = this.computations ++ n.computations,
-        epsilonNFA = this.epsilonNFA || n.epsilonNFA
+        computations = this.computations ++ n.computations
         )
     case _ => throw new IllegalArgumentException ("Can only merge with NFAComponents")
   }
@@ -30,7 +28,7 @@ case class NFAComponents (
     this.copy (computations = newComps)
 
   override def toAutomaton: Either [String, NFA] = initialState match {
-    case Some (init) => Right (NFA (states, alphabet, transitions, init, finalStates, computations, true))
+    case Some (init) => Right (NFA (states, alphabet, transitions, init, finalStates, computations))
     case None => Left ("No initial state defined in the input")
   }
 

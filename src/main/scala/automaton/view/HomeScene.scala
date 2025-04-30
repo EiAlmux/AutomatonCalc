@@ -13,7 +13,7 @@ class HomeScene extends Scene(400, 300):
       new Button("DFA") {
         onAction = _ =>
           val filePath = "src/exampleDFA.txt"
-          val dfa = MainAutomaton.processFiniteAutomaton(filePath)
+          val dfa = MainAutomaton.processAutomaton(filePath)
           println(dfa.toString)
           println("\n\nProcessing input...\n")
 

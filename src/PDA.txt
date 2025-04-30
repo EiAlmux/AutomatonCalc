@@ -1,0 +1,15 @@
+PDA {
+    states: q0, q1, q2;
+    alphabet: a, b;
+    stack alphabet: Z, X;
+    transitions:
+            q0, a, Z -> q0, XZ;
+            q0, a, X -> q0, XX;
+            q0, b, X -> q1, ε;
+            q1, b, X -> q1, ε;
+            q1, ε, Z -> q2, Z;
+    initial state: q0;
+    initial stack: Z;
+    final: q2;
+    computations: aabb, aab, bbaa, ab, bab, aba, aaaabbbb ;
+}

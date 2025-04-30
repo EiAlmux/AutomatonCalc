@@ -15,9 +15,12 @@ object CLIMain:
   val DEBUG = 0
 
   def main(args: Array[String]): Unit = {
-    val filePath = "src/eNFA.txt"
+    //val filePath = "src/DFA.txt"
+    //val filePath = "src/NFA.txt"
+    //val filePath = "src/eNFA.txt"
+    val filePath = "src/PDA.txt"
 
-    val automaton = MainAutomaton.processFiniteAutomaton(filePath)
+    val automaton = MainAutomaton.processAutomaton(filePath)
 
     if (DEBUG == 1) {
       automaton match {
@@ -39,7 +42,7 @@ object CLIMain:
           None
       }
     }
-
+    
     testedAutomaton match {
       case Some(tested: Automaton[_, _]) => println(AutomatonView.automatonFormat(tested))
       case Some(_) => println("Error: Test result is not an Automaton")

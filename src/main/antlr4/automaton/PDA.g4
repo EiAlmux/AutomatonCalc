@@ -3,7 +3,7 @@ import CommonLexer ;
 
 automaton : automatonType '{' section* '}' ;
 
-automatonType : 'PDA' ;
+automatonType : PDA ;
 
 section
     : states
