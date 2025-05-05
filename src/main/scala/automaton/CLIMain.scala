@@ -6,19 +6,19 @@ import automaton.view.AutomatonView
 
 /*
 TODO:
-Expand pda
-TestString in PDA
+Turing machine:
 
+Context free grammars:
+
+Have more than one automaton per file
 */
 
 object CLIMain:
   val DEBUG = 0
 
   def main(args: Array[String]): Unit = {
-    //val filePath = "src/DFA.txt"
-    //val filePath = "src/NFA.txt"
-    //val filePath = "src/eNFA.txt"
-    val filePath = "src/PDA.txt"
+
+    val filePath = "src/DFA.txt"
 
     val automaton = MainAutomaton.processAutomaton(filePath)
 

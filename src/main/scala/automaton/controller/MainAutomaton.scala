@@ -3,15 +3,38 @@ package automaton.controller
 import automaton.antrl4.{FiniteAutomatonLexer, FiniteAutomatonParser, PDALexer, PDAParser}
 import automaton.model.{Automaton, PDA}
 import automaton.controller.visitor.{FiniteAutomatonBuilderVisitor, PDABuilderVisitor}
+
 import scala.jdk.CollectionConverters.ListHasAsScala
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.*
 import scala.util.control.NonFatal
-
+import scala.util.matching.Regex
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
 object MainAutomaton {
+
+//  def processMultipleAutomata(filePath: String): Option[List[Automaton[_, _]]] = {
+//    val input = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8)
+//
+//    val sections = splitFile(input)
+//  }
+
+  private def splitFile(input: String): List[(String, String)] = {
+
+    val pattern = """(DFA|NFA|EPSILON_NFA|PDA)\b""".r
+
+    val matches = pattern.findAllMatchIn(input).toList
+
+    if (matches.isEmpty) return List((input, "DFA")) //used as default
+
+    val sections = matches.sliding (2).map {
+      case List (m1, m2) => (input.substring (m1.start, m2.start), m1.group (1))
+    }.toList :+
+      ((input.substring (matches.last.start), matches.last.group (1)))
+
+    sections
+  }
 
   def processAutomaton (filePath: String): Option [Automaton [_, _]] = {
     val input = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8)
