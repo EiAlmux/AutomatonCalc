@@ -14,26 +14,9 @@ lazy val root = (project in file("."))
     Antlr4 / antlr4PackageName := Some("automaton.antrl4"),
     Antlr4 / antlr4Version := "4.13.2",
 
-    javaOptions ++= {
-      val osName = System.getProperty("os.name").toLowerCase match {
-        case win if win.contains("win") => "win"
-        case mac if mac.contains("mac") => "mac"
-        case _ => "linux"
-      }
-
-      val javafxLibPath = baseDirectory.value / "lib" / s"javafx-sdk-24-$osName" / "lib"
-      Seq(
-        "--module-path", javafxLibPath.getAbsolutePath,
-        "--add-modules", "javafx.controls,javafx.fxml"
-      )
-    },
-
     // Dependencies
     libraryDependencies ++= Seq(
-      "org.scalafx" %% "scalafx" % "23.0.1-R34",
       "com.typesafe" % "config" % "1.4.3",
       "org.antlr" % "antlr4-runtime" % "4.13.2",
     )
-
-
   )

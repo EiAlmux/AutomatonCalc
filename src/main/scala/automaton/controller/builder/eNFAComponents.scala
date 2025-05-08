@@ -1,6 +1,6 @@
 package automaton.controller.builder
 
-import automaton.model.{Computation, eNFA, State, Transition}
+import automaton.model.{Computation, ENFA, State, Transition}
 
 case class eNFAComponents (
                            states: Set [State] = Set.empty,
@@ -9,9 +9,9 @@ case class eNFAComponents (
                            initialState: Option [State] = None,
                            finalStates: Set [State] = Set.empty,
                            computations: Seq [Computation] = Seq.empty,
-                         ) extends AutomatonComponents [Transition, eNFA] {
+                         ) extends AutomatonComponents [Transition, ENFA] {
 
-  def merge (other: AutomatonComponents [Transition, eNFA]): eNFAComponents = other match {
+  def merge (other: AutomatonComponents [Transition, ENFA]): eNFAComponents = other match {
     case e: eNFAComponents =>
       eNFAComponents (
         states = this.states ++ e.states,
@@ -27,12 +27,12 @@ case class eNFAComponents (
   def withComputations (newComps: Seq [Computation]): eNFAComponents =
     this.copy (computations = newComps)
 
-  override def toAutomaton: Either [String, eNFA] = initialState match {
-    case Some (init) => Right (eNFA (states, alphabet, transitions, init, finalStates, computations))
+  override def toAutomaton: Either [String, ENFA] = initialState match {
+    case Some (init) => Right (ENFA (states, alphabet, transitions, init, finalStates, computations))
     case None => Left ("No initial state defined in the input")
   }
 
-  def toeNFA: eNFA = toAutomaton match {
+  def toeNFA: ENFA = toAutomaton match {
     case Right (enfa) => enfa
     case Left (err) => throw new RuntimeException (err)
   }

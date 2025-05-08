@@ -4,8 +4,10 @@ case class State(label: String) {
   override def toString: String = label
 }
 
-case class Computation(str: String, isAccepted: Boolean = false, computed: Boolean = false)
-
+case class Computation(str: String,
+                       isAccepted: Boolean = false,
+                       computed: Boolean = false,
+                       trace: String = "")
 
 
 trait Automaton[T <: TransitionType, A <: Automaton[T, A]] {
@@ -19,17 +21,14 @@ trait Automaton[T <: TransitionType, A <: Automaton[T, A]] {
 
   def withUpdatedComputations(newComps : Seq[Computation]): A
 
-  def testString(input: String): Boolean
+  def testString(input: String): (Boolean, String)
 
   def testAutomaton(): A =
-    val updatedComputations = computations.map {
-      case c if c.computed => c
-      case c => c.copy(
-        isAccepted = testString(c.str),
-        computed = true
-      )
+    val updated = computations.map { c =>
+      val (result, trace) = testString(c.str)
+      c.copy(isAccepted = result, computed = true, trace = trace)
     }
-    withUpdatedComputations(updatedComputations)
+    withUpdatedComputations(updated)
 
   protected def validate ():Unit =
       require(states.nonEmpty, "Automaton must have at least one state")

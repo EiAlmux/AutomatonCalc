@@ -35,25 +35,30 @@ case class DFA (states:Set[State],
         )
     }
 
-  override def testString(input: String): Boolean = boundary[Boolean] :
+  override def testString(input: String): (Boolean, String) = boundary[(Boolean, String)] :
     val inputSymbols = input.map(_.toString)
     var currentState = initialState
+    val output = new StringBuilder()
 
-    inputSymbols.foreach { symbol =>
-      transitions.find(t => t.source == currentState && t.symbol == symbol) match
-        case Some(transition) => currentState = transition.destination
-        case None => break(false)
+    output.append(s"($currentState, ε)\n")
+
+    inputSymbols.zipWithIndex.foreach { case (symbol, index) =>
+      val currentInput = inputSymbols.take(index + 1).mkString
+      transitions.find(t => t.source == currentState && t.symbol == symbol) match {
+        case Some(transition) =>
+          currentState = transition.destination
+          output.append(s"  → ($currentState, $currentInput)\n")
+        case None =>
+          break((false, output.toString))
+      }
     }
-    finalStates.contains(currentState)
+    val accepted = finalStates.contains(currentState)
+    def acceptedValue = if (accepted) "ACCEPTED\n\n" else "REJECTED\n\n"
+    output.append(s"Final state: $currentState → $acceptedValue")
+    (accepted, output.toString)
 
 
   override def withUpdatedComputations(newComps: Seq[Computation]): DFA =
     this.copy(computations = newComps)
-
-
-
-
-
-
 
 }

@@ -34,16 +34,35 @@ case class NFA (states:Set[State],
     this.copy(computations = newComps)
 
 
-  override def testString (input:String):Boolean = boundary[Boolean] {
+  override def testString (input:String): (Boolean, String) = boundary[(Boolean, String)] {
     val inputSymbols = input.map(_.toString)
     var currentStates = Set(initialState)
+    val output = new StringBuilder()
 
-    inputSymbols.foreach { symbol =>
-      currentStates = transition(currentStates, symbol)
-      if (currentStates.isEmpty) break(false)
+    def formatStates (states: Set[State]): String =
+      if (states.isEmpty) "∅"
+      else states.toList.mkString("{", ", ", "}")
+
+    output.append(s"(${formatStates(currentStates)},  ε)\n")
+
+    inputSymbols.zipWithIndex.foreach { case (symbol, index) =>
+      val currentInput = inputSymbols.take(index + 1).mkString
+      val nextStates = transition(currentStates, symbol)
+
+      if (nextStates.isEmpty) {
+        output.append(s"  → (∅, $currentInput)\n")
+        output.append("REJECTED\n\n")
+        break((false, output.toString))
+      }
+
+      output.append(s"  → (${formatStates(nextStates)}, $currentInput)\n")
+      currentStates = nextStates
     }
 
-    currentStates.exists(finalStates.contains)
+    val accepted = currentStates.exists(finalStates.contains)
+    val acceptedValue = if (accepted) "ACCEPTED\n\n" else "REJECTED\n\n"
+    output.append(s"Final states: ${formatStates(currentStates)} → $acceptedValue")
+    (accepted, output.toString)
   }
 
   private def transition (states:Set[State], symbol:String):Set[State] = {

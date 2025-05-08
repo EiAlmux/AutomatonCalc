@@ -4,6 +4,8 @@ import automaton.controller.MainAutomaton
 import automaton.model.Automaton
 import automaton.view.AutomatonView
 
+import scala.util.{Failure, Success, Try}
+
 /*
 TODO:
 Turing machine:
@@ -16,39 +18,35 @@ Have more than one automaton per file
 object CLIMain:
   val DEBUG = 0
 
+  //Standard arguments: "src/DFA.txt" "src/NFA.txt" "src/ENFA.txt" "src/PDA.txt" "src/exampleAnyAutomaton.txt"
   def main(args: Array[String]): Unit = {
-
-    val filePath = "src/DFA.txt"
-
-    val automaton = MainAutomaton.processAutomaton(filePath)
-
-    if (DEBUG == 1) {
-      automaton match {
-        case Some(auto) =>
-          println(AutomatonView.automatonFormat(auto))
-          println("\n\nProcessing input...\n")
-        case None =>
-          println("Failed to process automaton")
-          return
-      }
+    if (args.isEmpty) {
+      println("Error: No input file specified.")
+      sys.exit(1)
     }
 
-    val testedAutomaton = automaton.flatMap { auto =>
-      try {
-        Some(auto.testAutomaton())
-      } catch {
-        case e:Exception =>
-          println(s"Error testing automaton: ${e.getMessage}")
-          None
+    args.foreach { filePath =>
+      println(s"\nProcessing file: $filePath")
+      val automataResults: List[Try[Automaton[_, _]]] =
+        MainAutomaton.processAutomata(filePath)
+
+      if (automataResults.isEmpty) {
+        println("No automata defined in file")
+      } else {
+        automataResults.zipWithIndex.foreach {
+          case (Success(auto), idx) =>
+            println(s"\nAutomaton ${idx + 1}:")
+            val tested = auto.testAutomaton()
+            println(AutomatonView.automatonFormat(tested))
+
+          case (Failure(err), idx) =>
+            // prints exactly the validation or parse error
+            println(s"Invalid automaton ${idx + 1}: ${err.getMessage}")
+        }
       }
-    }
-    
-    testedAutomaton match {
-      case Some(tested: Automaton[_, _]) => println(AutomatonView.automatonFormat(tested))
-      case Some(_) => println("Error: Test result is not an Automaton")
-      case None => println("Failed to test automaton")
     }
   }
+  
 
 
 
