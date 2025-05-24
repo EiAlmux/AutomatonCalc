@@ -1,6 +1,6 @@
 package automaton.view
 
-import automaton.model.{Automaton, Computation, DFA, NFA, PDA, PDATransition, ENFA}
+import automaton.model.{Automaton, CFG, CFGProduction, Computation, DFA, ENFA, NFA, PDA, PDATransition, State}
 
 object AutomatonView {
 
@@ -9,10 +9,50 @@ object AutomatonView {
       case _: DFA => "DFA:"
       case _: NFA => "NFA:"
       case _: ENFA => "ε-NFA:"
-      case _: PDA => "PDA:"
+      case _: PDA => "PDA: "
+      case _: CFG => "CFG:"
       case _ => return "View error: Unknown automaton type"
     }
 
+    automaton match {
+      case cfg: CFG => cfgFormat(cfg)
+      case _ => defaultAutomatonFormat(automaton, header)
+    }
+  }
+
+  private def cfgFormat(cfg: CFG): String = {
+    s"""
+       |CFG:
+       |  Variables: ${cfg.variables.mkString(", ")}
+       |  Terminals: ${cfg.terminals.mkString(", ")}
+       |  Start Symbol: ${cfg.startSymbol}
+       |  Productions:
+       |    ${formatCFGProductions(cfg.productions, cfg.startSymbol)}
+       |  Derivations:${if (cfg.computations.isEmpty) " None" else ""}
+       |${cfg.computations.map(c => s"    ${compFormat(c)}").mkString("\n")}
+       |${formatTracesSection(cfg.computations)}
+       |""".stripMargin
+  }
+
+  private def formatCFGProductions(productions: Set[CFGProduction],
+                                  startSymbol: State): String = {
+    val allLhs = productions.toList.map(_.lhs).distinct
+    val lhsSymbols = startSymbol +: allLhs.filterNot(_ == startSymbol)
+
+    lhsSymbols.map { lhs =>
+      val prodsForLHS = productions.filter(_.lhs == lhs).toList
+
+      val rhsFormatted = prodsForLHS.map { p =>
+        if (p.rhs.isEmpty || p.rhs.mkString == "EPSILON") "ε"
+        else p.rhs.mkString(" ")
+      }
+
+      s"$lhs → ${rhsFormatted.mkString(" | ")}"
+    }.mkString("\n    ")
+  }
+
+
+  private def defaultAutomatonFormat(automaton: Automaton[_, _], header: String): String = {
     s"""
        |$header
        |  States: ${automaton.states.mkString(", ")}
@@ -66,13 +106,28 @@ object AutomatonView {
         s"$state:\n      ${stateTransitions.mkString("\n      ")}"
       }.mkString("\n    ")
 
-    case _ =>
-      automaton.states.map { state =>
-        val stateTransitions = automaton.transitions.collect {
+    case dfa: DFA  =>
+      dfa.states.map { state =>
+        val stateTransitions = dfa.transitions.collect {
           case t if t.source == state => s"${t.symbol} --> ${t.destination}"
         }
         s"$state:\n      ${stateTransitions.mkString("\n      ")}"
       }.mkString("\n    ")
+    case nfa: NFA =>
+      nfa.states.map { state =>
+        val stateTransitions = nfa.transitions.collect {
+          case t if t.source == state => s"${t.symbol} --> ${t.destination}"
+        }
+        s"$state:\n      ${stateTransitions.mkString("\n      ")}"
+      }.mkString("\n    ")
+    case enfa: ENFA =>
+      enfa.states.map { state =>
+        val stateTransitions = enfa.transitions.collect {
+          case t if t.source == state => s"${t.symbol} --> ${t.destination}"
+        }
+        s"$state:\n      ${stateTransitions.mkString("\n      ")}"
+      }.mkString("\n    ")
+    case _ => ""
   }
 
   private def compFormat(computation: Computation): String = {

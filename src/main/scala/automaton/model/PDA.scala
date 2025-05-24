@@ -13,6 +13,36 @@ case class PDA(
 
   validate()
 
+  override protected def validate(): Unit = {
+    super.validate()
+    require(stackAlphabet.nonEmpty, "stack alphabet non empty")
+    require(stackAlphabet.contains(initialStack), "initial stack must be in stack alphabet")
+    validateTransitions()
+  }
+
+  private def validateTransitions(): Unit = {
+    transitions.foreach { t =>
+      require(states.contains(t.source), s"Transition source ${t.source} must be in states")
+      require(states.contains(t.destination), s"Transition destination ${t.destination} must be in states")
+
+      require(
+        t.symbol == "ε" || alphabet.contains(t.symbol),
+        s"Transition symbol ${t.symbol} must be in alphabet or ε"
+      )
+
+      require(
+        t.stackSymbolToPop == "ε" || stackAlphabet.contains(t.stackSymbolToPop),
+        s"Stack symbol to pop ${t.stackSymbolToPop} must be in stack alphabet or ε"
+      )
+
+      t.symbolsToPush.foreach { sym =>
+        require(sym == "ε" || stackAlphabet.contains(sym),
+          s"Pushed symbol $sym must be in stack alphabet or ε"
+        )
+      }
+    }
+  }
+
   override def withUpdatedComputations(newComps: Seq[Computation]): PDA =
     this.copy(computations = newComps)
 
@@ -95,36 +125,8 @@ case class PDA(
     output.append(s"Final result: $acceptanceReason\n\n")
     (accepted, output.toString)
   }
-
-  override protected def validate(): Unit = {
-    super.validate()
-    require(stackAlphabet.nonEmpty, "stack alphabet non empty")
-    require(stackAlphabet.contains(initialStack), "initial stack must be in stack alphabet")
-    validateTransitions()
-  }
-
-  private def validateTransitions(): Unit = {
-    transitions.foreach { t =>
-      require(states.contains(t.source), s"Transition source ${t.source} must be in states")
-      require(states.contains(t.destination), s"Transition destination ${t.destination} must be in states")
-
-      require(
-        t.symbol == "ε" || alphabet.contains(t.symbol),
-        s"Transition symbol ${t.symbol} must be in alphabet or ε"
-      )
-
-      require(
-        t.stackSymbolToPop == "ε" || stackAlphabet.contains(t.stackSymbolToPop),
-        s"Stack symbol to pop ${t.stackSymbolToPop} must be in stack alphabet or ε"
-      )
-
-      t.symbolsToPush.foreach { sym =>
-        require(sym == "ε" || stackAlphabet.contains(sym),
-          s"Pushed symbol $sym must be in stack alphabet or ε"
-        )
-      }
-    }
-  }
+ 
 }
+
 
       

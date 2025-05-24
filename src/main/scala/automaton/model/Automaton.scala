@@ -10,10 +10,10 @@ case class Computation(str: String,
                        trace: String = "")
 
 
-trait Automaton[T <: TransitionType, A <: Automaton[T, A]] {
+trait Automaton[R <: Rule, A <: Automaton[R, A]] {
   def states:Set[State]
   def alphabet:Set[String]
-  def transitions:Set[T]
+  def transitions:Set[R]
   def initialState:State
   def finalStates:Set[State]
 

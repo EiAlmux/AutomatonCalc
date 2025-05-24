@@ -1,10 +1,12 @@
 package automaton.model
 
-sealed trait TransitionType {
+sealed trait Rule
+
+sealed trait TransitionType extends Rule {
   def source: State
   def symbol: String
   def destination: State
-}
+} 
 
 case class Transition(
                        source: State,
@@ -20,3 +22,5 @@ case class PDATransition(
                           symbolsToPush: List[String]
                         ) extends TransitionType
 
+
+case class CFGProduction(lhs: State, rhs: Seq[String]) extends Rule

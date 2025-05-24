@@ -1,0 +1,11 @@
+CFG {
+    variables: S, A, B;
+    terminals: 0, 1, 2;
+    start: S;
+
+    productions:
+        S -> A B;
+        A -> 0 | ε;
+        B -> 1 2 | 1 | 2 | ε;
+    derivations: 012, 000 ;
+}

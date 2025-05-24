@@ -8,17 +8,17 @@ import scala.util.{Failure, Success, Try}
 
 /*
 TODO:
-Turing machine:
 
+Turing machine:
 Context free grammars:
 
-Have more than one automaton per file
 */
 
 object CLIMain:
   val DEBUG = 0
 
   //Standard arguments: "src/DFA.txt" "src/NFA.txt" "src/ENFA.txt" "src/PDA.txt" "src/exampleAnyAutomaton.txt"
+  // "src.CFG.txt"
   def main(args: Array[String]): Unit = {
     if (args.isEmpty) {
       println("Error: No input file specified.")
@@ -40,7 +40,6 @@ object CLIMain:
             println(AutomatonView.automatonFormat(tested))
 
           case (Failure(err), idx) =>
-            // prints exactly the validation or parse error
             println(s"Invalid automaton ${idx + 1}: ${err.getMessage}")
         }
       }

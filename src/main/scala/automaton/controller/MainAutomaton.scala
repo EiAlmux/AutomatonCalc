@@ -1,8 +1,8 @@
 package automaton.controller
 
-import automaton.antrl4.{FiniteAutomatonLexer, FiniteAutomatonParser, PDALexer, PDAParser}
-import automaton.controller.visitor.{FiniteAutomatonBuilderVisitor, PDABuilderVisitor}
-import automaton.model.{Automaton, PDA}
+import automaton.antrl4.{CFGLexer, CFGParser, FiniteAutomatonLexer, FiniteAutomatonParser, PDALexer, PDAParser}
+import automaton.controller.visitor.{CFGBuilderVisitor, FiniteAutomatonBuilderVisitor, PDABuilderVisitor}
+import automaton.model.{Automaton, CFG, PDA}
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.*
 
@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
-import scala.util.{Try, Success, Failure}
+import scala.util.{Failure, Success, Try}
 
 object MainAutomaton {
 
@@ -20,6 +20,13 @@ object MainAutomaton {
 
     sections.map { case (content, automatonType) =>
       automatonType match {
+        case "CFG" =>
+          processGrammar[CFGParser, CFGBuilderVisitor, CFG](
+            content,
+            new CFGLexer(_),
+            new CFGParser(_),
+            (v, t) => v.visit(t).toAutomaton
+          )
         case "PDA" =>
           processGrammar[PDAParser, PDABuilderVisitor, PDA](
             content,
@@ -40,7 +47,7 @@ object MainAutomaton {
   }
 
   private def splitFile(input: String): List[(String, String)] = {
-    val pattern = """(DFA|NFA|ε-NFA|PDA)\s*\{""".r
+    val pattern = """(DFA|NFA|ε-NFA|PDA|CFG)\s*\{""".r
     val matches = pattern.findAllMatchIn(input).toList
 
     matches match {
@@ -91,6 +98,10 @@ object MainAutomaton {
   implicit val pdaVisitorCtor: () => PDABuilderVisitor =
     () => new PDABuilderVisitor
   implicit val pdaExtractTree: PDAParser => ParseTree =
+    _.automaton()
+  implicit val cfgVisitorCtor: () => CFGBuilderVisitor =
+    () => new CFGBuilderVisitor
+  implicit val cfgExtractTree: CFGParser => ParseTree =
     _.automaton()
 }
 

@@ -1,6 +1,5 @@
 package automaton.controller.visitor
 
-
 import automaton.CLIMain
 import automaton.antrl4.{FiniteAutomatonBaseVisitor, FiniteAutomatonParser}
 import automaton.controller.builder.{AutomatonComponents, DFAComponents, NFAComponents, eNFAComponents}

@@ -17,7 +17,6 @@ class PDABuilderVisitor extends PDABaseVisitor [PDAComponents] {
   override def visitAutomaton (ctx: PDAParser.AutomatonContext): PDAComponents = {
     seenSections = Set.empty
     automatonType = Some(ctx.automatonType().getText.toLowerCase)
-    val initialType = Some(ctx.automatonType().getText)
     val sections = ctx.section().asScala.map(visit)
     val result = sections.foldLeft(PDAComponents())(_ merge _)
 
