@@ -10,7 +10,7 @@ case class CFG(
 
                 /**
                  * Inherited from Automaton, but unused in CFG semantics.
-                 * Retained for interface compatibility.
+                 * Retained for compatibility.
                  */
                 override val finalStates: Set[State] = Set.empty,
                 override val computations: Seq[Computation] //Here are derivations
