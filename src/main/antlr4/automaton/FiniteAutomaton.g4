@@ -18,9 +18,10 @@ states : 'states' ':' SYMBOL (',' SYMBOL)* ';' ;
 alphabet : 'alphabet' ':' SYMBOL (',' SYMBOL)* ';' ;
 
 transitions : 'transitions' ':' (transition (';' transition)*)? ';' ;
-transition : SYMBOL inputSymbol '->' transitionTarget ;
+transition : source inputSymbol '->' destination ;
+source : SYMBOL ;
 inputSymbol : SYMBOL | EPSILON ;
-transitionTarget
+destination
     : SYMBOL               # SingleState
     | '{' SYMBOL (',' SYMBOL)* '}'  # StateSet
     ;

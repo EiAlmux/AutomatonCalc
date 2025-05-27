@@ -1,0 +1,33 @@
+TuringMachine {
+    states : q0, q1, q2, q3, q4, qy, qn ;
+    input alphabet : 0, 1 ;
+    tape alphabet : 0, 1, x, y, B ;
+    initial state : q0 ;
+    blank symbol : B ;
+    final : qy, qn ;
+
+    transitions :
+        q0,0 -> q1,x,RIGHT ;
+        q0,1 -> q2,y,RIGHT ;
+        q0,B -> qy,B,RIGHT ;
+
+        q1,0 -> q1,0,RIGHT ;
+        q1,1 -> q1,1,RIGHT ;
+        q1,B -> q3,B,LEFT ;
+
+        q2,0 -> q2,0,RIGHT ;
+        q2,1 -> q2,1,RIGHT ;
+        q2,B -> q3,B,LEFT ;
+
+        q3,0 -> q4,x,LEFT ;
+        q3,1 -> q4,y,LEFT ;
+        q3,x -> qy,x,RIGHT ;
+        q3,y -> qy,y,RIGHT ;
+
+        q4,0 -> q4,0,LEFT ;
+        q4,1 -> q4,1,LEFT ;
+        q4,x -> q0,x,RIGHT ;
+        q4,y -> q0,y,RIGHT ;
+
+    computations : 010, 0110, 1001, 101, 0, 1 ;
+}

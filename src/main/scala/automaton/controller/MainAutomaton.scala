@@ -1,8 +1,8 @@
 package automaton.controller
 
-import automaton.antrl4.{CFGLexer, CFGParser, FiniteAutomatonLexer, FiniteAutomatonParser, PDALexer, PDAParser}
-import automaton.controller.visitor.{CFGBuilderVisitor, FiniteAutomatonBuilderVisitor, PDABuilderVisitor}
-import automaton.model.{Automaton, CFG, PDA}
+import automaton.antrl4.*
+import automaton.controller.visitor.{CFGBuilderVisitor, FiniteAutomatonBuilderVisitor, PDABuilderVisitor, TMBuilderVisitor}
+import automaton.model.{Automaton, CFG, PDA, TuringMachine}
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.*
 
@@ -10,16 +10,23 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 object MainAutomaton {
 
   def processAutomata(filePath: String): List[Try[Automaton[_, _]]] = {
-    val input     = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8)
-    val sections  = splitFile(input)
+    val input = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8)
+    val sections = splitFile(input)
 
     sections.map { case (content, automatonType) =>
       automatonType match {
+        case "TuringMachine" => 
+          processGrammar[TuringMachineParser, TMBuilderVisitor, TuringMachine](
+            content,
+            new TuringMachineLexer(_),
+            new TuringMachineParser(_),
+            (v, t) => v.visit(t).toAutomaton
+          )
         case "CFG" =>
           processGrammar[CFGParser, CFGBuilderVisitor, CFG](
             content,
@@ -41,13 +48,13 @@ object MainAutomaton {
             new FiniteAutomatonParser(_),
             (v, t) => v.visit(t).toAutomaton
           )
-        }
+      }
 
     }
   }
 
   private def splitFile(input: String): List[(String, String)] = {
-    val pattern = """(DFA|NFA|ε-NFA|PDA|CFG)\s*\{""".r
+    val pattern = """(DFA|NFA|ε-NFA|PDA|CFG|TuringMachine)\s*\{""".r
     val matches = pattern.findAllMatchIn(input).toList
 
     matches match {
@@ -67,8 +74,8 @@ object MainAutomaton {
                                                  parserCtor: CommonTokenStream => P,
                                                  buildAutomaton: (V, ParseTree) => Either[String, A])
                                                (implicit
-                                                 visitorCtor: () => V,
-                                                 extractTree: P => ParseTree
+                                                visitorCtor: () => V,
+                                                extractTree: P => ParseTree
                                                ): Try[A] = {
     val stream = CharStreams.fromString(input)
     val tokens = new CommonTokenStream(lexerCtor(stream))
@@ -91,6 +98,7 @@ object MainAutomaton {
         Failure(e)
     }
   }
+
   implicit val faVisitorCtor: () => FiniteAutomatonBuilderVisitor =
     () => new FiniteAutomatonBuilderVisitor
   implicit val faExtractTree: FiniteAutomatonParser => ParseTree =
@@ -102,6 +110,10 @@ object MainAutomaton {
   implicit val cfgVisitorCtor: () => CFGBuilderVisitor =
     () => new CFGBuilderVisitor
   implicit val cfgExtractTree: CFGParser => ParseTree =
+    _.automaton()
+  implicit val tmVisitorCtor: () => TMBuilderVisitor =
+    () => new TMBuilderVisitor
+  implicit val tmExtractTree: TuringMachineParser => ParseTree =
     _.automaton()
 }
 

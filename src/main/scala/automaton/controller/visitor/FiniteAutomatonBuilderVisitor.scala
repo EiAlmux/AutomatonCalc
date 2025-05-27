@@ -9,16 +9,16 @@ import org.antlr.v4.runtime.tree.*
 import scala.jdk.CollectionConverters.*
 
 class FiniteAutomatonBuilderVisitor
-  extends FiniteAutomatonBaseVisitor [AutomatonComponents [_, _]] {
+  extends FiniteAutomatonBaseVisitor[AutomatonComponents[_, _]] {
 
   private val requiredSections = Set("states", "alphabet", "transitions", "initialState")
-  private var seenSections = Set.empty [String]
-  private var automatonType: Option [String] = None
+  private var seenSections = Set.empty[String]
+  private var automatonType: Option[String] = None
 
   //Chooses the builder for the correct type of finite automaton
-  private var currentBuilder: AutomatonComponents [_, _] = _
+  private var currentBuilder: AutomatonComponents[_, _] = _
 
-  override def visitAutomaton (ctx: FiniteAutomatonParser.AutomatonContext): AutomatonComponents [_, _] = {
+  override def visitAutomaton(ctx: FiniteAutomatonParser.AutomatonContext): AutomatonComponents[_, _] = {
     seenSections = Set.empty
     automatonType = Some(ctx.automatonType().getText.toLowerCase)
     currentBuilder = automatonType match {
@@ -37,15 +37,15 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
-  private def validateRequiredSections (): Unit = {
+  private def validateRequiredSections(): Unit = {
     val missing = requiredSections.diff(seenSections)
     if (missing.nonEmpty)
       throw new IllegalArgumentException(
         s"Missing required sections: ${missing.mkString(", ")}"
-        )
+      )
   }
 
-  override def visitStates (ctx: FiniteAutomatonParser.StatesContext): AutomatonComponents [_, _] = {
+  override def visitStates(ctx: FiniteAutomatonParser.StatesContext): AutomatonComponents[_, _] = {
     seenSections += "states"
     val stateNames = ctx.SYMBOL().asScala.map(_.getText)
     if (stateNames.isEmpty) throw new IllegalArgumentException("At least one state is required")
@@ -58,7 +58,7 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
-  override def visitAlphabet (ctx: FiniteAutomatonParser.AlphabetContext): AutomatonComponents [_, _] = {
+  override def visitAlphabet(ctx: FiniteAutomatonParser.AlphabetContext): AutomatonComponents[_, _] = {
     seenSections += "alphabet"
     val symbols = ctx.SYMBOL().asScala.map(_.getText)
     if (symbols.isEmpty) throw new IllegalArgumentException("Alphabet cannot be empty")
@@ -72,14 +72,14 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
-  override def visitTransitions (ctx: FiniteAutomatonParser.TransitionsContext): AutomatonComponents [_, _] = {
+  override def visitTransitions(ctx: FiniteAutomatonParser.TransitionsContext): AutomatonComponents[_, _] = {
     seenSections += "transitions"
 
     val transitions = ctx.transition().asScala.flatMap { t =>
-      val from = State(t.SYMBOL.getText)
+      val from = State(t.source.getText)
       val symbol = t.inputSymbol().getText
 
-      t.transitionTarget() match {
+      t.destination() match {
         case single: FiniteAutomatonParser.SingleStateContext =>
           Set(Transition(from, symbol, State(single.SYMBOL.getText)))
         case set: FiniteAutomatonParser.StateSetContext =>
@@ -96,7 +96,7 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
-  override def visitInitialState (ctx: FiniteAutomatonParser.InitialStateContext): AutomatonComponents [_, _] = {
+  override def visitInitialState(ctx: FiniteAutomatonParser.InitialStateContext): AutomatonComponents[_, _] = {
     seenSections += "initialState"
     val symbol = ctx.SYMBOL().getText
     if (symbol.isEmpty) throw new IllegalArgumentException("The initial state is required")
@@ -110,7 +110,7 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
-  override def visitFinalStates (ctx: FiniteAutomatonParser.FinalStatesContext): AutomatonComponents [_, _] = {
+  override def visitFinalStates(ctx: FiniteAutomatonParser.FinalStatesContext): AutomatonComponents[_, _] = {
     seenSections += "finalStates"
     val symbols = ctx.SYMBOL().asScala.map(_.getText)
 
@@ -123,7 +123,7 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
-  override def visitComputations (ctx: FiniteAutomatonParser.ComputationsContext): AutomatonComponents [_, _] = {
+  override def visitComputations(ctx: FiniteAutomatonParser.ComputationsContext): AutomatonComponents[_, _] = {
     seenSections += "computations"
     val strings = ctx.SYMBOL().asScala.map(_.getText)
 
@@ -139,7 +139,7 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
-  override def visitSection (ctx: FiniteAutomatonParser.SectionContext): AutomatonComponents [_, _] = {
+  override def visitSection(ctx: FiniteAutomatonParser.SectionContext): AutomatonComponents[_, _] = {
     visitChildren(ctx)
     currentBuilder
   }

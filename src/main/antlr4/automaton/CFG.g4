@@ -19,7 +19,8 @@ terminals : 'terminals' ':' SYMBOL (',' SYMBOL)* ';' ;
 
 productions : 'productions' ':' (production (';' production)*)? ';' ;
 
-production : SYMBOL '->' productionRhs ;
+production : lhs '->' productionRhs ;
+lhs: SYMBOL ;
 
 productionRhs : rhsAlternative ('|' rhsAlternative)* ;
 

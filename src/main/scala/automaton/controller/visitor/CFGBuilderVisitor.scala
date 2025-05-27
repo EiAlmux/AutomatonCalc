@@ -5,14 +5,15 @@ import automaton.CLIMain
 import automaton.antrl4.{CFGBaseVisitor, CFGParser}
 import automaton.controller.builder.CFGComponents
 import automaton.model.{CFGProduction, Computation, State}
-import scala.jdk.CollectionConverters._
+
+import scala.jdk.CollectionConverters.*
 
 
-class CFGBuilderVisitor extends CFGBaseVisitor [CFGComponents] {
+class CFGBuilderVisitor extends CFGBaseVisitor[CFGComponents] {
 
   private val requiredSections = Set("variables", "terminals", "productions", "startSymbol")
-  private var seenSections = Set.empty [String]
-  private var automatonType: Option [String] = None
+  private var seenSections = Set.empty[String]
+  private var automatonType: Option[String] = None
 
   override def visitAutomaton(ctx: CFGParser.AutomatonContext): CFGComponents = {
     seenSections = Set.empty
@@ -53,7 +54,7 @@ class CFGBuilderVisitor extends CFGBaseVisitor [CFGComponents] {
     seenSections += "productions"
 
     val prods: Set[CFGProduction] = ctx.production().asScala.flatMap { prodCtx =>
-      val lhs = State(prodCtx.SYMBOL().getText)
+      val lhs = State(prodCtx.lhs().getText)
       prodCtx.productionRhs().rhsAlternative().asScala.map { altCtx =>
         val rhsSymbols: Seq[String] = altCtx.SYMBOL().asScala.map(_.getText).toSeq
 
@@ -80,7 +81,7 @@ class CFGBuilderVisitor extends CFGBaseVisitor [CFGComponents] {
 
   override def defaultResult: CFGComponents = CFGComponents()
 
-  override def aggregateResult (aggregate: CFGComponents, nextResult: CFGComponents): CFGComponents = {
+  override def aggregateResult(aggregate: CFGComponents, nextResult: CFGComponents): CFGComponents = {
     aggregate.merge(nextResult)
   }
 }

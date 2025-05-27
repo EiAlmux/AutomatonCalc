@@ -37,15 +37,13 @@ case class CFGComponents(
 
   override def initialState: Option[State] = startSymbol
 
-  def withComputations(newComps: Seq[Computation]): CFGComponents =
-    this.copy(computations = newComps)
 
   def toCFG: CFG = toAutomaton match {
     case Right(cfg) => cfg
     case Left(err) => throw new RuntimeException(err)
   }
 
-  def toAutomaton: Either[String, CFG] = startSymbol match {
+  override def toAutomaton: Either[String, CFG] = startSymbol match {
     case Some(init) => Right(CFG(variables, terminals, productions, init, finalStates, computations))
     case None => Left("No start symbol defined in the input")
   }

@@ -19,7 +19,7 @@ case class DFA (states:Set[State],
     super.validate()
     validateTransitions()
 
-  private def validateTransitions ():Unit =
+  private def validateTransitions ():Unit = {
     val transitionCounts = transitions
       .groupBy(t => (t.source, t.symbol))
       .view
@@ -32,8 +32,9 @@ case class DFA (states:Set[State],
       require(
         transitionCounts.getOrElse((state, symbol), 0) == 1,
         s"DFA must have exactly one transition for state $state and symbol $symbol"
-        )
+      )
     }
+  }
 
   override def testString(input: String): (Boolean, String) = boundary[(Boolean, String)] :
     val inputSymbols = input.map(_.toString)
