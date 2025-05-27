@@ -4,9 +4,11 @@ sealed trait Rule
 
 sealed trait TransitionType extends Rule {
   def source: State
+
   def symbol: String
+
   def destination: State
-} 
+}
 
 case class Transition(
                        source: State,
@@ -24,3 +26,12 @@ case class PDATransition(
 
 
 case class CFGProduction(lhs: State, rhs: Seq[String]) extends Rule
+
+case class TMTransition(
+                         source: State,
+                         symbol: String, //symbol to read, named as such for compatibility 
+                         destination: State,
+                         symbolWrite: String,
+                         direction: Direction
+                       ) extends TransitionType
+

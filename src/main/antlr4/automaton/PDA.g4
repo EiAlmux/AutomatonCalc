@@ -21,7 +21,9 @@ inputAlphabet : 'alphabet' ':' SYMBOL (',' SYMBOL)* ';' ;
 stackAlphabet: 'stack alphabet' ':' SYMBOL (',' SYMBOL)* ';' ;
 
 transitions : 'transitions' ':' (transition (';' transition)*)? ';' ;
-transition : SYMBOL ',' inputSymbol ',' stackSymbol '->' SYMBOL ',' stackOperation ;
+transition : source ',' inputSymbol ',' stackSymbol '->' destination ',' stackOperation ;
+source: SYMBOL ;
+destination: SYMBOL ;
 inputSymbol : SYMBOL | EPSILON ;
 stackSymbol : SYMBOL | EPSILON ;
 stackOperation : SYMBOL* | EPSILON ;

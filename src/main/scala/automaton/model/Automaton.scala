@@ -16,7 +16,6 @@ trait Automaton[R <: Rule, A <: Automaton[R, A]] {
   def transitions:Set[R]
   def initialState:State
   def finalStates:Set[State]
-
   def computations:Seq[Computation] = Seq.empty
 
   def withUpdatedComputations(newComps : Seq[Computation]): A
