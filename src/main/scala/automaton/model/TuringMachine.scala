@@ -51,7 +51,6 @@ case class TuringMachine(
     this.copy(computations = newComps)
 
   override def testString(input: String): (Boolean, String) = {
-    //TO-DO
-    (false, "placeholder")
+    (false, "")
   }
 }
