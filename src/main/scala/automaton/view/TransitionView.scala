@@ -1,6 +1,9 @@
 package automaton.view
 
-import automaton.model.{Automaton, DFA, ENFA, NFA, PDA, TuringMachine}
+import automaton.model._
+
+//This could be reworked to use transition format and a method to get all transition from an automaton
+//instead of whatever mess this is.
 
 object TransitionView {
 
@@ -8,7 +11,7 @@ object TransitionView {
     case tm: TuringMachine =>
       tm.states.toList.sortBy(_.toString).map { state =>
         val stateTransitions = tm.transitions.collect {
-          case t if t.source == state => s"${t.source}, ${t.symbol} --> ${t.destination}, ${t.symbolWrite}, ${t.direction}"
+          case t if t.source == state => transitionFormat(t)
         }
         s"$state:\n      ${stateTransitions.mkString("\n      ")}"
       }.mkString("\n    ")
@@ -46,5 +49,19 @@ object TransitionView {
     case _ => ""
   }
 
-
+  def transitionFormat(transition: Rule): String = transition match {
+    case tmt: TMTransition =>
+      s"${tmt.source}, ${tmt.symbol} --> ${tmt.destination}, ${tmt.symbolWrite}, ${tmt.direction}"
+    case pdaT: PDATransition =>
+      val pushStr = if (pdaT.symbolsToPush.isEmpty) "ε" else pdaT.symbolsToPush.mkString
+      s"${pdaT.source}, ${pdaT.symbol}, ${pdaT.stackSymbolToPop} -> ${pdaT.destination}, $pushStr"
+    case t: Transition =>
+      s"${t.source}, ${t.symbol} --> ${t.destination}"
+    case _ => "Unknown transition"
+  }
+  
+  //Used in NFA view
+  def transitionSetFormat(transitions: Set[Transition]): String = {
+    transitions.map(transitionFormat).mkString(", ")
+  }
 }

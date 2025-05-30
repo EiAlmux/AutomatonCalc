@@ -9,16 +9,19 @@ import scala.util.{Failure, Success, Try}
 /*
 TODO:
 
-Turing machine:
-Context free grammars:
+Use tail recursive when possible and avoid var
+
+Improve line alignment in view: ...new step.... applied transition
+
+Reduce bloat and reuse code, such as in TransitionView
 
 */
 
 object CLIMain:
   val DEBUG = 0
 
-  //Standard arguments: "src/DFA.txt" "src/NFA.txt" "src/ENFA.txt" "src/PDA.txt" "src/exampleAnyAutomaton.txt"
-  // "src.CFG.txt"
+  //Standard arguments: "src/DFA.txt" "src/NFA.txt" "src/ENFA.txt" "src/PDA.txt"
+  // "src/CFG.txt" "src/TuringMachine.txt" "src/MultipleAutomata.txt"
   def main(args: Array[String]): Unit = {
     if (args.isEmpty) {
       println("Error: No input file specified.")

@@ -53,14 +53,14 @@ case class CFG(
               val rhsSymbols = prod.rhs.filter(_ != "ε")
               val nextSeq     = prefix ++ rhsSymbols ++ suffix
               val stepDesc    =
-                s"Applied ${prod.lhs.label} -> ${prod.rhs.mkString(" ")}  ⇒  ${nextSeq.mkString(" ")}"
+                s"${nextSeq.mkString(" ")} \t\tapplied ${prod.lhs.label} -> ${prod.rhs.mkString(" ")}"
               derive(nextSeq, steps :+ stepDesc, depth + 1)
             }
             .nextOption()
       }
     }
 
-    val startStep = s"Start with ${startSymbol.label}"
+    val startStep = s"${startSymbol.label}"
     derive(List(startSymbol.label), List(startStep)) match {
       case Some(successSteps) =>
         successSteps.zipWithIndex.foreach { case (step, i) =>

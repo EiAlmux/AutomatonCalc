@@ -29,9 +29,8 @@ case class CFGProduction(lhs: State, rhs: Seq[String]) extends Rule
 
 case class TMTransition(
                          source: State,
-                         symbol: String, //symbol to read, named as such for compatibility 
+                         symbol: String, //symbol to read, named as such for compatibility
                          destination: State,
                          symbolWrite: String,
                          direction: Direction
                        ) extends TransitionType
-

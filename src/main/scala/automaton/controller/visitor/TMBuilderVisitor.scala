@@ -88,8 +88,8 @@ class TMBuilderVisitor extends TuringMachineBaseVisitor [TMComponents] {
 
   override def visitBlankSymbol(ctx: TuringMachineParser.BlankSymbolContext): TMComponents = {
     seenSections += "blankSymbol"
-    val symbol = ctx.SYMBOL().getText
-    if (symbol.isEmpty) throw new IllegalArgumentException("Blank symbol is required")
+    val symbol: Char = ctx.SYMBOL().getText.head
+    if (symbol.toString.isEmpty) throw new IllegalArgumentException("Blank symbol is required")
     TMComponents(blankSymbol = Some(symbol))
   }
 

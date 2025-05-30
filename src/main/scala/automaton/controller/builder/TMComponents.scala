@@ -8,7 +8,7 @@ case class TMComponents(
                          tapeAlphabet: Set[String] = Set.empty,
                          transitions: Set[TMTransition] = Set.empty,
                          initialState: Option[State] = None,
-                         blankSymbol: Option[String] = None,
+                         blankSymbol: Option[Char] = None,
                          finalStates: Set[State] = Set.empty,
                          computations: Seq[Computation] = Seq.empty,
                        ) extends AutomatonComponents[TMTransition, TuringMachine] {

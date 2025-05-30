@@ -1,5 +1,7 @@
 package automaton.model
 
+import automaton.view.TransitionView.transitionFormat
+
 case class PDA(
                 states: Set[State],
                 alphabet: Set[String],
@@ -100,7 +102,7 @@ case class PDA(
               t.symbolsToPush.filter(_ != "ε") ::: poppedStack
 
             val newConfig = Config(t.destination, newRemaining, updatedStack)
-            output.append(s"  → $newConfig \n")
+            output.append(s"  → $newConfig \t\tapplied \t${transitionFormat(t)}\n")
             newConfig
           }
         }

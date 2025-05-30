@@ -1,6 +1,7 @@
 package automaton.model
 
 import automaton.controller.builder.DFAComponents
+import automaton.view.TransitionView.transitionFormat
 
 import scala.util.boundary
 import scala.util.boundary.break
@@ -48,7 +49,7 @@ case class DFA (states:Set[State],
       transitions.find(t => t.source == currentState && t.symbol == symbol) match {
         case Some(transition) =>
           currentState = transition.destination
-          output.append(s"  → ($currentState, $currentInput)\n")
+          output.append(s"  → ($currentState, $currentInput) \t\t applied ${transitionFormat(transition)}\n")
         case None =>
           break((false, output.toString))
       }

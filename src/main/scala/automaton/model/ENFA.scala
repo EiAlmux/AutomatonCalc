@@ -1,5 +1,7 @@
 package automaton.model
 
+import automaton.view.TransitionView.transitionSetFormat
+
 import scala.collection.mutable
 import scala.util.boundary
 import scala.util.boundary.break
@@ -45,15 +47,15 @@ case class ENFA(states: Set [State],
     inputSymbols.zipWithIndex.foreach { case (symbol, index) =>
       val currentInput = inputSymbols.take(index + 1).mkString
 
-      val afterTransition = transition(currentStates, symbol)
+      val (nextStates, transitions) = transition(currentStates, symbol)
 
-      if (afterTransition.isEmpty) {
+      if (nextStates.isEmpty) {
         output.append(s"  → (∅, $currentInput)\n")
         output.append("REJECTED\n\n")
         break((false, output.toString))
       }
-      currentStates = epsilonClosure(afterTransition)
-      output.append(s"  → (${formatStates(currentStates)}, $currentInput)\n")
+      currentStates = epsilonClosure(nextStates)
+      output.append(s"  → (${formatStates(currentStates)}, $currentInput) \t\t applied ${transitionSetFormat(transitions)}\n")
     }
 
     val accepted = currentStates.exists(finalStates.contains)
@@ -62,12 +64,16 @@ case class ENFA(states: Set [State],
     (accepted, output.toString)
   }
 
-  private def transition (states: Set [State], symbol: String): Set [State] = {
-    states.flatMap { state =>
+  private def transition(states: Set[State], symbol: String): (Set[State], Set[Transition]) = {
+    val stateTransitionPairs = states.flatMap { state =>
       transitions.collect {
-        case t if t.source == state && t.symbol == symbol => t.destination
+        case t if t.source == state && t.symbol == symbol => (t.destination, t)
       }
     }
+    val destinationStates = stateTransitionPairs.map(_._1)
+    val matchedTransitions = stateTransitionPairs.map(_._2)
+
+    (destinationStates, matchedTransitions)
   }
 
   private def epsilonClosure (states: Set [State]): Set [State] = {
