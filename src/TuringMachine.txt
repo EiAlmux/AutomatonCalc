@@ -29,5 +29,5 @@ TuringMachine {
         q4,X -> q0,X,RIGHT ;
         q4,Y -> q0,Y,RIGHT ;
 
-    computations : 010, 010, 0110, 1001, 101, 0, 1, 11111;
+    computations : 010, 010, 0110, 101, 0, 1, 11111;
 }

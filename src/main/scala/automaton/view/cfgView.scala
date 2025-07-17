@@ -2,6 +2,7 @@ package automaton.view
 
 import automaton.model.{CFG, CFGProduction, State}
 import automaton.view.ComputationView.{compFormat, formatTracesSection}
+import automaton.view.AutomatonView.automatonFormat
 
 object cfgView {
 
@@ -15,6 +16,7 @@ object cfgView {
        |    ${formatCFGProductions(cfg.productions, cfg.startSymbol)}
        |  Derivations:${if (cfg.computations.isEmpty) " None" else ""}
        |${cfg.computations.map(c => s"    ${compFormat(c)}").mkString("\n")}
+       |  Equivalent PDA: ${automatonFormat(cfg.toPDA)}
        |${formatTracesSection(cfg.computations)}
        |""".stripMargin
   }
