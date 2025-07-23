@@ -60,8 +60,8 @@ object TransitionView {
     case _ => "Unknown transition"
   }
   
-  //Used in NFA view
+  //Used in NFA and e-NFA view
   def transitionSetFormat(transitions: Set[Transition]): String = {
-    transitions.map(transitionFormat).mkString(", ")
+    transitions.map(transitionFormat).mkString("(", "), (", ")")
   }
 }
