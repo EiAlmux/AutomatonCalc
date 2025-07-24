@@ -84,8 +84,10 @@ case class DFA (states:Set[State],
       transitions.find(t => t.source == currentState && t.symbol == symbol) match {
         case Some(transition) =>
           currentState = transition.destination
-          output.append(f"  → ($currentState, $currentInput) %-30s\t")
-          output.append(f" Applied ${transitionFormat(transition)}%-25s\n")
+          val currentStateFmt = f"  → ($currentState, $currentInput)"
+          output.append(f"$currentStateFmt%-30s")
+          val appliedFmt = f"${transitionFormat(transition)}%-30s"
+          output.append(s" Applied $appliedFmt\n")
         case None =>
           break((false, output.toString))
       }

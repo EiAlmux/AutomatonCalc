@@ -45,7 +45,10 @@ case class ENFA (states: Set [State],
         output.append("REJECTED\n\n")
         break((false, output.toString))
       }
-      output.append(s"  → [${formatStates(nextStates)}] \t\t\t applied ${transitionSetFormat(transitions)}\n")
+      val statesFmt = f"  → [${formatStates(nextStates)}]"
+      output.append(f"$statesFmt%-50s")
+      val appliedFmt = f"Applied ${transitionSetFormat(transitions)}\n"
+      output.append(f"$appliedFmt%-1s") 
 
       val eclose = epsilonClosure(nextStates)
       output.append(s"ε-closure of ${formatStates(nextStates)}: ${formatStates(eclose)}\n")
