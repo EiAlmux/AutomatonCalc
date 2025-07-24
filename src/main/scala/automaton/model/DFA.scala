@@ -6,6 +6,19 @@ import automaton.view.TransitionView.transitionFormat
 import scala.util.boundary
 import scala.util.boundary.break
 
+/**
+ * A deterministic finite automaton (DFA) implementation.
+ *
+ * @constructor Creates a new DFA with the specified components.
+ * @param states       The set of states in the DFA
+ * @param alphabet     The input alphabet symbols
+ * @param transitions  The set of transitions between states
+ * @param initialState The starting state of the DFA
+ * @param finalStates  The set of accepting/final states
+ * @param computations The sequence of computations performed by the DFA
+ * @throws IllegalArgumentException if the DFA is invalid (missing states,
+ *                                  invalid transitions, etc.)
+ */
 case class DFA (states:Set[State],
                 alphabet:Set[String],
                 transitions:Set[Transition],
@@ -16,10 +29,24 @@ case class DFA (states:Set[State],
 
   validate()
 
+  /**
+   * Validates the DFA structure.
+   *
+   * @throws IllegalArgumentException if:
+   *         - The DFA is missing states, initial state, or final states
+   *         - States or symbols in transitions don't exist in the DFA
+   *         - There aren't exactly one transition per state-symbol pair
+   */
   override protected def validate ():Unit =
     super.validate()
     validateTransitions()
 
+  /**
+   * Validates that the DFA has exactly one transition for each state-symbol pair.
+   *
+   * @throws IllegalArgumentException if any state-symbol pair doesn't have
+   *                                  exactly one transition
+   */
   private def validateTransitions ():Unit = {
     val transitionCounts = transitions
       .groupBy(t => (t.source, t.symbol))
@@ -37,6 +64,14 @@ case class DFA (states:Set[State],
     }
   }
 
+  /**
+   * Tests whether the DFA accepts a given input string.
+   *
+   * @param input The string to test
+   * @return A tuple containing:
+   *         - A boolean indicating whether the string was accepted
+   *         - A string showing the computation steps
+   */
   override def testString(input: String): (Boolean, String) = boundary[(Boolean, String)] :
     val inputSymbols = input.map(_.toString)
     var currentState = initialState
@@ -49,7 +84,8 @@ case class DFA (states:Set[State],
       transitions.find(t => t.source == currentState && t.symbol == symbol) match {
         case Some(transition) =>
           currentState = transition.destination
-          output.append(s"  → ($currentState, $currentInput) \t\t applied ${transitionFormat(transition)}\n")
+          output.append(f"  → ($currentState, $currentInput) %-30s\t")
+          output.append(f" Applied ${transitionFormat(transition)}%-25s\n")
         case None =>
           break((false, output.toString))
       }
@@ -60,6 +96,12 @@ case class DFA (states:Set[State],
     (accepted, output.toString)
 
 
+  /**
+   * Creates a new DFA with updated computations.
+   *
+   * @param newComps The new sequence of computations
+   * @return A new DFA instance with the updated computations
+   */
   override def withUpdatedComputations(newComps: Seq[Computation]): DFA =
     this.copy(computations = newComps)
 

@@ -29,4 +29,5 @@ destination
 initialState : 'initial' ':' SYMBOL ';' ;
 finalStates : 'final' ':' SYMBOL (',' SYMBOL)* ';' ;
 
-computations : 'computations' ':' SYMBOL (',' SYMBOL)* ';' ;
+computations : 'computations' ':' computationitem (',' computationitem)* ';' ;
+computationitem : SYMBOL | EPSILON;

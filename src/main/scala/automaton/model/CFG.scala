@@ -97,7 +97,7 @@ case class CFG(
       if (depth > 1000) return None
       val stepFmt = f"Step $depth%2d: ${current.mkString(" ")}%-30s"
       trace.append(stepFmt)
-      if (steps.nonEmpty) trace.append(f" [Applied: ${steps.lastOption.getOrElse("")}%-25s]")
+      if (steps.nonEmpty) trace.append(f" Applied: ${steps.lastOption.getOrElse("")}%-25s")
       trace.append("\n")
 
       val terminalsSoFar = current.filterNot(nonTerminals.contains).mkString

@@ -8,6 +8,29 @@ import org.antlr.v4.runtime.tree.*
 
 import scala.jdk.CollectionConverters.*
 
+/**
+ * A visitor class that builds different types of finite automata (DFA, NFA, ε-NFA)
+ * by traversing and processing ANTLR parse trees.
+ *
+ * This visitor implements the builder pattern to construct automaton components
+ * based on the parsed input. It validates required sections and handles
+ * different automaton types appropriately.
+ *
+ * The visitor processes the following sections:
+ * - Automaton type (DFA, NFA, or ε-NFA)
+ * - States
+ * - Alphabet
+ * - Transitions
+ * - Initial state
+ * - Final states (optional)
+ * - Computations (optional)
+ *
+ * @see FiniteAutomatonBaseVisitor
+ * @see AutomatonComponents
+ * @see DFAComponents
+ * @see NFAComponents
+ * @see eNFAComponents
+ */
 class FiniteAutomatonBuilderVisitor
   extends FiniteAutomatonBaseVisitor[AutomatonComponents[_, _]] {
 
@@ -18,6 +41,13 @@ class FiniteAutomatonBuilderVisitor
   //Chooses the builder for the correct type of finite automaton
   private var currentBuilder: AutomatonComponents[_, _] = _
 
+  /**
+   * Processes an entire automaton definition and returns the built components.
+   *
+   * @param ctx The parse tree context for the automaton definition
+   * @return The built automaton components
+   * @throws IllegalArgumentException if the automaton type is unknown or sections are missing
+   */
   override def visitAutomaton(ctx: FiniteAutomatonParser.AutomatonContext): AutomatonComponents[_, _] = {
     seenSections = Set.empty
     automatonType = Some(ctx.automatonType().getText.toLowerCase)
@@ -37,6 +67,11 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
+  /**
+   * Validates that all required sections have been processed.
+   *
+   * @throws IllegalArgumentException if any required sections are missing
+   */
   private def validateRequiredSections(): Unit = {
     val missing = requiredSections.diff(seenSections)
     if (missing.nonEmpty)
@@ -45,6 +80,13 @@ class FiniteAutomatonBuilderVisitor
       )
   }
 
+  /**
+   * Processes the states section of the automaton definition.
+   *
+   * @param ctx The parse tree context for the states section
+   * @return The updated automaton components with states added
+   * @throws IllegalArgumentException if no states are provided
+   */
   override def visitStates(ctx: FiniteAutomatonParser.StatesContext): AutomatonComponents[_, _] = {
     seenSections += "states"
     val stateNames = ctx.SYMBOL().asScala.map(_.getText)
@@ -58,6 +100,13 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
+  /**
+   * Processes the alphabet section of the automaton definition.
+   *
+   * @param ctx The parse tree context for the alphabet section
+   * @return The updated automaton components with alphabet symbols added
+   * @throws IllegalArgumentException if the alphabet is empty
+   */
   override def visitAlphabet(ctx: FiniteAutomatonParser.AlphabetContext): AutomatonComponents[_, _] = {
     seenSections += "alphabet"
     val symbols = ctx.SYMBOL().asScala.map(_.getText)
@@ -72,6 +121,12 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
+  /**
+   * Processes the transitions section of the automaton definition.
+   *
+   * @param ctx The parse tree context for the transitions section
+   * @return The updated automaton components with transitions added
+   */
   override def visitTransitions(ctx: FiniteAutomatonParser.TransitionsContext): AutomatonComponents[_, _] = {
     seenSections += "transitions"
 
@@ -96,6 +151,13 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
+  /**
+   * Processes the initial state section of the automaton definition.
+   *
+   * @param ctx The parse tree context for the initial state section
+   * @return The updated automaton components with initial state set
+   * @throws IllegalArgumentException if no initial state is provided
+   */
   override def visitInitialState(ctx: FiniteAutomatonParser.InitialStateContext): AutomatonComponents[_, _] = {
     seenSections += "initialState"
     val symbol = ctx.SYMBOL().getText
@@ -110,6 +172,12 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
+  /**
+   * Processes the final states section of the automaton definition.
+   *
+   * @param ctx The parse tree context for the final states section
+   * @return The updated automaton components with final states added
+   */
   override def visitFinalStates(ctx: FiniteAutomatonParser.FinalStatesContext): AutomatonComponents[_, _] = {
     seenSections += "finalStates"
     val symbols = ctx.SYMBOL().asScala.map(_.getText)
@@ -123,9 +191,15 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
+  /**
+   * Processes the computations section of the automaton definition.
+   *
+   * @param ctx The parse tree context for the computations section
+   * @return The updated automaton components with computations added
+   */
   override def visitComputations(ctx: FiniteAutomatonParser.ComputationsContext): AutomatonComponents[_, _] = {
     seenSections += "computations"
-    val strings = ctx.SYMBOL().asScala.map(_.getText)
+    val strings = ctx.computationitem().asScala.map(_.getText)
 
     currentBuilder = currentBuilder match {
       case d: DFAComponents =>
@@ -139,6 +213,12 @@ class FiniteAutomatonBuilderVisitor
     currentBuilder
   }
 
+  /**
+   * Processes a generic section of the automaton definition.
+   *
+   * @param ctx The parse tree context for the section
+   * @return The updated automaton components
+   */
   override def visitSection(ctx: FiniteAutomatonParser.SectionContext): AutomatonComponents[_, _] = {
     visitChildren(ctx)
     currentBuilder

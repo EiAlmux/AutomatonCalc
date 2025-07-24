@@ -1,20 +1,9 @@
 ε-NFA {
-    states: p0, p1;
-    alphabet: a;
-    transitions:
-        p0 ε -> p1;
-        p0 a -> p0;
-    initial: p0;
-    final: p1;
-    computations: b, a, aa;
-}
-
-ε-NFA {
     states: q0, q1, q2;
     alphabet: a, b;
     transitions:
-        q0 ε -> q1;
         q0 a -> q0;
+        q0 ε -> q1;
         q0 b -> q2;
         q1 a -> q1;
         q1 b -> q2;
