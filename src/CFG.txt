@@ -9,12 +9,3 @@ CFG {
         B -> 1 | 1 | 1 2 | ε;
     derivations: 012, 000, 12 ;
 }
-
-CFG {
-    variables: P;
-    terminals: 0, 1;
-    start: P;
-
-    productions:
-        P -> ε | 0 | 1 | 0 P 0 | 1 P 1;
-}

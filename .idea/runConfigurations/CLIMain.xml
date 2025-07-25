@@ -4,7 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="automaton.CLIMain" />
     <module name="AutomatonCalc" />
-    <option name="PROGRAM_PARAMETERS" value="&quot;src/eNFA.txt&quot;" />
+    <option name="PROGRAM_PARAMETERS" value="&quot;src/MultipleAutomata.txt&quot;" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

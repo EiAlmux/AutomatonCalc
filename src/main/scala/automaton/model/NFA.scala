@@ -68,7 +68,7 @@ case class NFA (states: Set [State],
       val statesFmt = f"  → (${formatStates(nextStates)}, $currentInput)"
       output.append(f"$statesFmt%-50s")
       val appliedFmt = f"Applied ${transitionSetFormat(transitions)}\n"
-      output.append(f"$appliedFmt%-1s")
+      output.append(f"$appliedFmt%-10s")
       currentStates = nextStates
     }
 
